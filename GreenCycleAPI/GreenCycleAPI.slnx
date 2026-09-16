@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="GreenCycle.API/GreenCycle.API.csproj" />
+  <Project Path="GreenCycle.Application/GreenCycle.Application.csproj" />
+  <Project Path="GreenCycle.Domain/GreenCycle.Domain.csproj" />
+  <Project Path="GreenCycle.Infrastructure/GreenCycle.Infrastructure.csproj" />
+</Solution>

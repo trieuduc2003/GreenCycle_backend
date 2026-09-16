@@ -1,0 +1,317 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|solutionrelative:greencycle.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.application\\interfaces\\services\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|solutionrelative:greencycle.application\\interfaces\\services\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.api\\hubs\\useridprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|solutionrelative:greencycle.api\\hubs\\useridprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC1EE5AF-4AB8-0913-2A22-CD7ACE696076}|GreenCycle.Infrastructure\\GreenCycle.Infrastructure.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.infrastructure\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC1EE5AF-4AB8-0913-2A22-CD7ACE696076}|GreenCycle.Infrastructure\\GreenCycle.Infrastructure.csproj|solutionrelative:greencycle.infrastructure\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.application\\dtos\\auth\\authresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|solutionrelative:greencycle.application\\dtos\\auth\\authresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.application\\interfaces\\services\\ijwttokengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|solutionrelative:greencycle.application\\interfaces\\services\\ijwttokengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|solutionrelative:greencycle.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC1EE5AF-4AB8-0913-2A22-CD7ACE696076}|GreenCycle.Infrastructure\\GreenCycle.Infrastructure.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.infrastructure\\services\\jwttokengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC1EE5AF-4AB8-0913-2A22-CD7ACE696076}|GreenCycle.Infrastructure\\GreenCycle.Infrastructure.csproj|solutionrelative:greencycle.infrastructure\\services\\jwttokengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.application\\dtos\\auth\\registerrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|solutionrelative:greencycle.application\\dtos\\auth\\registerrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|solutionrelative:greencycle.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC1EE5AF-4AB8-0913-2A22-CD7ACE696076}|GreenCycle.Infrastructure\\GreenCycle.Infrastructure.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.infrastructure\\data\\greencycledbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC1EE5AF-4AB8-0913-2A22-CD7ACE696076}|GreenCycle.Infrastructure\\GreenCycle.Infrastructure.csproj|solutionrelative:greencycle.infrastructure\\data\\greencycledbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{4D5D511E-1BFF-F8D2-5CF1-EB77E9AB899C}|GreenCycle.API\\GreenCycle.API.csproj|solutionrelative:greencycle.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{62875324-BBE6-502F-EBF6-5495F030BA32}|GreenCycle.Domain\\GreenCycle.Domain.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.domain\\entities\\scrapyard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{62875324-BBE6-502F-EBF6-5495F030BA32}|GreenCycle.Domain\\GreenCycle.Domain.csproj|solutionrelative:greencycle.domain\\entities\\scrapyard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{62875324-BBE6-502F-EBF6-5495F030BA32}|GreenCycle.Domain\\GreenCycle.Domain.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.domain\\entities\\collector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{62875324-BBE6-502F-EBF6-5495F030BA32}|GreenCycle.Domain\\GreenCycle.Domain.csproj|solutionrelative:greencycle.domain\\entities\\collector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{62875324-BBE6-502F-EBF6-5495F030BA32}|GreenCycle.Domain\\GreenCycle.Domain.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.domain\\entities\\dropofforder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{62875324-BBE6-502F-EBF6-5495F030BA32}|GreenCycle.Domain\\GreenCycle.Domain.csproj|solutionrelative:greencycle.domain\\entities\\dropofforder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{62875324-BBE6-502F-EBF6-5495F030BA32}|GreenCycle.Domain\\GreenCycle.Domain.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.domain\\entities\\collectorlivelocation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{62875324-BBE6-502F-EBF6-5495F030BA32}|GreenCycle.Domain\\GreenCycle.Domain.csproj|solutionrelative:greencycle.domain\\entities\\collectorlivelocation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.application\\interfaces\\services\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|solutionrelative:greencycle.application\\interfaces\\services\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|d:\\greencycle\\sourcecode\\greencycleapi\\greencycle.application\\dtos\\auth\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80DDFFF7-5604-B59F-6CCA-35FC35FA9B3B}|GreenCycle.Application\\GreenCycle.Application.csproj|solutionrelative:greencycle.application\\dtos\\auth\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IOrderService.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\Interfaces\\Services\\IOrderService.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Application\\Interfaces\\Services\\IOrderService.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\Interfaces\\Services\\IOrderService.cs",
+              "RelativeToolTip": "GreenCycle.Application\\Interfaces\\Services\\IOrderService.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwAYAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-15T11:43:35.031Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "GreenCycle.API\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "GreenCycle.API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T15:32:52.386Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AuthResponseDto.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\DTOs\\Auth\\AuthResponseDto.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Application\\DTOs\\Auth\\AuthResponseDto.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\DTOs\\Auth\\AuthResponseDto.cs",
+              "RelativeToolTip": "GreenCycle.Application\\DTOs\\Auth\\AuthResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T13:58:36.411Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "JwtTokenGenerator.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Infrastructure\\Services\\JwtTokenGenerator.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Infrastructure\\Services\\JwtTokenGenerator.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Infrastructure\\Services\\JwtTokenGenerator.cs",
+              "RelativeToolTip": "GreenCycle.Infrastructure\\Services\\JwtTokenGenerator.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAYAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T15:09:36.225Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IJwtTokenGenerator.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\Interfaces\\Services\\IJwtTokenGenerator.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Application\\Interfaces\\Services\\IJwtTokenGenerator.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\Interfaces\\Services\\IJwtTokenGenerator.cs",
+              "RelativeToolTip": "GreenCycle.Application\\Interfaces\\Services\\IJwtTokenGenerator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T14:00:03.407Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\Program.cs",
+              "RelativeDocumentMoniker": "GreenCycle.API\\Program.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\Program.cs",
+              "RelativeToolTip": "GreenCycle.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGsAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T15:33:16.814Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserIdProvider.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\Hubs\\UserIdProvider.cs",
+              "RelativeDocumentMoniker": "GreenCycle.API\\Hubs\\UserIdProvider.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\Hubs\\UserIdProvider.cs",
+              "RelativeToolTip": "GreenCycle.API\\Hubs\\UserIdProvider.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-15T11:07:18.147Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Infrastructure\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Infrastructure\\Services\\AuthService.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Infrastructure\\Services\\AuthService.cs",
+              "RelativeToolTip": "GreenCycle.Infrastructure\\Services\\AuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T15:27:59.831Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "RegisterRequestDto.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\DTOs\\Auth\\RegisterRequestDto.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Application\\DTOs\\Auth\\RegisterRequestDto.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\DTOs\\Auth\\RegisterRequestDto.cs",
+              "RelativeToolTip": "GreenCycle.Application\\DTOs\\Auth\\RegisterRequestDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T13:57:38.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "GreenCycle.API\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\Properties\\launchSettings.json",
+              "RelativeToolTip": "GreenCycle.API\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwCgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-08T15:45:11.156Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "GreenCycleDbContext.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Infrastructure\\Data\\GreenCycleDbContext.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Infrastructure\\Data\\GreenCycleDbContext.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Infrastructure\\Data\\GreenCycleDbContext.cs",
+              "RelativeToolTip": "GreenCycle.Infrastructure\\Data\\GreenCycleDbContext.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAADEAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T15:22:49.309Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\appsettings.json",
+              "RelativeDocumentMoniker": "GreenCycle.API\\appsettings.json",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.API\\appsettings.json",
+              "RelativeToolTip": "GreenCycle.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-08T13:46:49.707Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ScrapYard.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Domain\\Entities\\ScrapYard.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Domain\\Entities\\ScrapYard.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Domain\\Entities\\ScrapYard.cs",
+              "RelativeToolTip": "GreenCycle.Domain\\Entities\\ScrapYard.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T15:20:22.542Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "DropOffOrder.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Domain\\Entities\\DropOffOrder.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Domain\\Entities\\DropOffOrder.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Domain\\Entities\\DropOffOrder.cs",
+              "RelativeToolTip": "GreenCycle.Domain\\Entities\\DropOffOrder.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T15:08:05.833Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "CollectorLiveLocation.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Domain\\Entities\\CollectorLiveLocation.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Domain\\Entities\\CollectorLiveLocation.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Domain\\Entities\\CollectorLiveLocation.cs",
+              "RelativeToolTip": "GreenCycle.Domain\\Entities\\CollectorLiveLocation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T15:08:05.169Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Collector.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Domain\\Entities\\Collector.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Domain\\Entities\\Collector.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Domain\\Entities\\Collector.cs",
+              "RelativeToolTip": "GreenCycle.Domain\\Entities\\Collector.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T15:05:21.04Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\Interfaces\\Services\\IAuthService.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Application\\Interfaces\\Services\\IAuthService.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\Interfaces\\Services\\IAuthService.cs",
+              "RelativeToolTip": "GreenCycle.Application\\Interfaces\\Services\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T14:01:09.122Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "LoginRequestDto.cs",
+              "DocumentMoniker": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\DTOs\\Auth\\LoginRequestDto.cs",
+              "RelativeDocumentMoniker": "GreenCycle.Application\\DTOs\\Auth\\LoginRequestDto.cs",
+              "ToolTip": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Application\\DTOs\\Auth\\LoginRequestDto.cs",
+              "RelativeToolTip": "GreenCycle.Application\\DTOs\\Auth\\LoginRequestDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T13:58:04.096Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

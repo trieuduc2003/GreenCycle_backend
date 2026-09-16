@@ -1,0 +1,17 @@
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\bin\Debug\net8.0\GreenCycle.Infrastructure.deps.json
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\bin\Debug\net8.0\GreenCycle.Infrastructure.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\bin\Debug\net8.0\GreenCycle.Infrastructure.pdb
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\bin\Debug\net8.0\GreenCycle.Application.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\bin\Debug\net8.0\GreenCycle.Domain.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\bin\Debug\net8.0\GreenCycle.Application.pdb
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\bin\Debug\net8.0\GreenCycle.Domain.pdb
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\GreenCycle.Infrastructure.csproj.AssemblyReference.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\GreenCycle.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\GreenCycle.Infrastructure.AssemblyInfoInputs.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\GreenCycle.Infrastructure.AssemblyInfo.cs
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\GreenCycle.Infrastructure.csproj.CoreCompileInputs.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\GreenCyc.9353D753.Up2Date
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\GreenCycle.Infrastructure.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\refint\GreenCycle.Infrastructure.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\GreenCycle.Infrastructure.pdb
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Infrastructure\obj\Debug\net8.0\ref\GreenCycle.Infrastructure.dll

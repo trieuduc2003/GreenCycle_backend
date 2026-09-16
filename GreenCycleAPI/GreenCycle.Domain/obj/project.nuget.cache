@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "G03BB3+LZaE=",
+  "success": true,
+  "projectFilePath": "D:\\GreenCycle\\SourceCode\\GreenCycleAPI\\GreenCycle.Domain\\GreenCycle.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Hoang Ba Thong\\.nuget\\packages\\nettopologysuite\\2.6.0\\nettopologysuite.2.6.0.nupkg.sha512",
+    "C:\\Users\\Hoang Ba Thong\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.31\\microsoft.windowsdesktop.app.ref.8.0.31.nupkg.sha512",
+    "C:\\Users\\Hoang Ba Thong\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.31\\microsoft.netcore.app.ref.8.0.31.nupkg.sha512",
+    "C:\\Users\\Hoang Ba Thong\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.31\\microsoft.aspnetcore.app.ref.8.0.31.nupkg.sha512"
+  ],
+  "logs": []
+}

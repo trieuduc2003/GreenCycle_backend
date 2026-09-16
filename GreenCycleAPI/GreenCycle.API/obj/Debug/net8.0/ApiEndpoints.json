@@ -1,0 +1,154 @@
+[
+  {
+    "ContainingType": "GreenCycle.API.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Auth.LoginRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.AuthController",
+    "Method": "Logout",
+    "RelativePath": "api/Auth/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Auth.RegisterRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.AuthController",
+    "Method": "SendOtp",
+    "RelativePath": "api/Auth/send-otp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Auth.SendOtpRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "GetOrderDetails",
+    "RelativePath": "api/Orders/{orderId}/details",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "CreateOrder",
+    "RelativePath": "api/Orders/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Order.CreateOrderRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "GetMyOrders",
+    "RelativePath": "api/Orders/my-orders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "GetWasteCategories",
+    "RelativePath": "api/Orders/waste-categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.TransactionsController",
+    "Method": "ConfirmTransaction",
+    "RelativePath": "api/Transactions/confirm",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Transaction.ConfirmTransactionRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.TransactionsController",
+    "Method": "InitiateTransaction",
+    "RelativePath": "api/Transactions/initiate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Transaction.InitiateTransactionRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.WalletController",
+    "Method": "GetBalance",
+    "RelativePath": "api/Wallet/balance",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

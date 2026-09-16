@@ -1,0 +1,15 @@
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\bin\Debug\net8.0\GreenCycle.Application.deps.json
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\bin\Debug\net8.0\GreenCycle.Application.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\bin\Debug\net8.0\GreenCycle.Application.pdb
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\bin\Debug\net8.0\GreenCycle.Domain.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\bin\Debug\net8.0\GreenCycle.Domain.pdb
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\GreenCycle.Application.csproj.AssemblyReference.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\GreenCycle.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\GreenCycle.Application.AssemblyInfoInputs.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\GreenCycle.Application.AssemblyInfo.cs
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\GreenCycle.Application.csproj.CoreCompileInputs.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\GreenCyc.8840D4C9.Up2Date
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\GreenCycle.Application.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\refint\GreenCycle.Application.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\GreenCycle.Application.pdb
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Application\obj\Debug\net8.0\ref\GreenCycle.Application.dll
