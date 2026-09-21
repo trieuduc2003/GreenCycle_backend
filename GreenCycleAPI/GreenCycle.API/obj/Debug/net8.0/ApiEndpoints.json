@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "GreenCycle.API.Controllers.AuthController",
+    "Method": "GoogleLogin",
+    "RelativePath": "api/Auth/google-login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Auth.GoogleLoginRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/Auth/login",
     "HttpMethod": "POST",
@@ -59,6 +75,38 @@
   },
   {
     "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "GetOrderDetail",
+    "RelativePath": "api/Orders/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "AssignCollector",
+    "RelativePath": "api/Orders/{orderId}/assign-collector",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
     "Method": "GetOrderDetails",
     "RelativePath": "api/Orders/{orderId}/details",
     "HttpMethod": "GET",
@@ -67,6 +115,48 @@
     "Parameters": [
       {
         "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "UpdatePickupStatus",
+    "RelativePath": "api/Orders/{orderId}/pickup-status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "newStatusId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "SelectYard",
+    "RelativePath": "api/Orders/{orderId}/select-yard",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "yardId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -91,8 +181,18 @@
   },
   {
     "ContainingType": "GreenCycle.API.Controllers.OrdersController",
-    "Method": "GetMyOrders",
-    "RelativePath": "api/Orders/my-orders",
+    "Method": "GetOrderHistory",
+    "RelativePath": "api/Orders/history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "GetPendingPickupOrders",
+    "RelativePath": "api/Orders/pickup/pending",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -103,6 +203,16 @@
     "ContainingType": "GreenCycle.API.Controllers.OrdersController",
     "Method": "GetWasteCategories",
     "RelativePath": "api/Orders/waste-categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "GetYardOrderHistory",
+    "RelativePath": "api/Orders/yard-history",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -142,6 +252,158 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "GreenCycle.API.Controllers.TransactionsController",
+    "Method": "InitiatePickupTransaction",
+    "RelativePath": "api/Transactions/pickup-initiate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Transaction.InitiateTransactionRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.UsersController",
+    "Method": "GetAddresses",
+    "RelativePath": "api/Users/addresses",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.UsersController",
+    "Method": "AddAddress",
+    "RelativePath": "api/Users/addresses",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Auth.AddAddressRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.UsersController",
+    "Method": "DeleteAddress",
+    "RelativePath": "api/Users/addresses/{addressId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "addressId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.UsersController",
+    "Method": "SetDefaultAddress",
+    "RelativePath": "api/Users/addresses/{addressId}/set-default",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "addressId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.UsersController",
+    "Method": "GetProfile",
+    "RelativePath": "api/Users/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.UsersController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/Users/profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Auth.UpdateProfileRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.VouchersController",
+    "Method": "GetAvailableVouchers",
+    "RelativePath": "api/Vouchers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.VouchersController",
+    "Method": "GetMyVouchers",
+    "RelativePath": "api/Vouchers/my-vouchers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.VouchersController",
+    "Method": "RedeemVoucher",
+    "RelativePath": "api/Vouchers/redeem",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Voucher.RedeemVoucherRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.VouchersController",
+    "Method": "UseVoucher",
+    "RelativePath": "api/Vouchers/use/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "GreenCycle.API.Controllers.WalletController",
     "Method": "GetBalance",
     "RelativePath": "api/Wallet/balance",
@@ -149,6 +411,152 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.WalletController",
+    "Method": "Deposit",
+    "RelativePath": "api/Wallet/deposit",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.API.Controllers.WalletController\u002BDepositRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.WalletController",
+    "Method": "GetTransactions",
+    "RelativePath": "api/Wallet/transactions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.YardsController",
+    "Method": "GetNearbyYards",
+    "RelativePath": "api/Yards/nearby",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "lat",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "lng",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "radius",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.YardsController",
+    "Method": "GetYardProfile",
+    "RelativePath": "api/Yards/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.YardsController",
+    "Method": "UpdateYardProfile",
+    "RelativePath": "api/Yards/profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "GreenCycle.API.Controllers.YardsController\u002BUpdateYardProfileRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.YardsController",
+    "Method": "GetRecentActivities",
+    "RelativePath": "api/Yards/recent-activities",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.YardsController",
+    "Method": "GetStatsToday",
+    "RelativePath": "api/Yards/stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.YardsController",
+    "Method": "GetStatsChart",
+    "RelativePath": "api/Yards/stats/chart",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "month",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "year",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.YardsController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Yards/status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "isOpening",
+        "Type": "System.Boolean",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   }
 ]

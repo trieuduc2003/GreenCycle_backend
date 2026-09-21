@@ -67,6 +67,23 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
+    /// Đăng nhập / Đăng ký bằng Google (OAuth 2.0 IdToken).
+    /// </summary>
+    [HttpPost("google-login")]
+    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequestDto request)
+    {
+        try
+        {
+            var result = await _authService.GoogleLoginAsync(request);
+            return Ok(new { Success = true, Message = "Đăng nhập Google thành công!", Data = result });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Success = false, Message = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Đăng xuất khỏi hệ thống.
     /// </summary>
     [HttpPost("logout")]

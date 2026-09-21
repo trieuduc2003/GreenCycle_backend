@@ -379,6 +379,10 @@
               "target": "Package",
               "version": "[4.2.0, )"
             },
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.76.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.11, )"

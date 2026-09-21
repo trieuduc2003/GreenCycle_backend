@@ -9,11 +9,16 @@ D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\GreenCycl
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\AutoMapper.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Azure.Core.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Azure.Identity.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\BCrypt-Net-Next.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\FluentValidation.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Google.Apis.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Google.Apis.Auth.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Google.Apis.Core.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Humanizer.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.Bcl.Cryptography.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
@@ -26,6 +31,7 @@ D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
@@ -47,6 +53,7 @@ D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Mono.TextTemplating.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\NetTopologySuite.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\NetTopologySuite.IO.SqlServerBytes.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -60,7 +67,9 @@ D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Co
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Drawing.Common.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Formats.Asn1.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Management.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Memory.Data.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Runtime.Caching.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
@@ -127,6 +136,7 @@ D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\runtimes\
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
@@ -154,14 +164,10 @@ D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticweb
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticwebassets.development.json
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\swae.build.ex.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\GreenCyc.C8638E71.Up2Date
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\GreenCycle.API.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\refint\GreenCycle.API.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\GreenCycle.API.pdb
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\GreenCycle.API.genruntimeconfig.cache
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\ref\GreenCycle.API.dll
-D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\BCrypt-Net-Next.dll
-D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.Bcl.Cryptography.dll
-D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
-D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\bin\Debug\net8.0\System.Formats.Asn1.dll
-D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

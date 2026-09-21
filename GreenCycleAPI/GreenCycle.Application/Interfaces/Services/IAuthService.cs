@@ -13,6 +13,9 @@ namespace GreenCycle.Application.Interfaces.Services
         /// <summary>Đăng nhập bằng SĐT và mật khẩu.</summary>
         Task<AuthResponseDto> LoginAsync(LoginRequestDto request);
 
+        /// <summary>Đăng nhập hoặc đăng ký bằng tài khoản Google.</summary>
+        Task<AuthResponseDto> GoogleLoginAsync(GoogleLoginRequestDto request);
+
         /// <summary>Đăng xuất khỏi hệ thống.</summary>
         Task LogoutAsync();
     }
