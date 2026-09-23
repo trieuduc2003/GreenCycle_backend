@@ -11,6 +11,8 @@ namespace GreenCycle.Application.DTOs.Order
         public decimal PlatformFee { get; set; }
         public DateTime CreatedAt { get; set; }
         public int ItemsCount { get; set; }
+        public double TotalEstimatedWeight { get; set; }
+
         
         // Extended info for Pick-up
         public string? SellerName { get; set; }

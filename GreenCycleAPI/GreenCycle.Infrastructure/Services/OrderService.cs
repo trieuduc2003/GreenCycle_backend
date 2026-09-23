@@ -13,10 +13,12 @@ namespace GreenCycle.Infrastructure.Services
     public class OrderService : IOrderService
     {
         private readonly GreenCycleDbContext _context;
+        private readonly ITransactionNotifier _notifier;
 
-        public OrderService(GreenCycleDbContext context)
+        public OrderService(GreenCycleDbContext context, ITransactionNotifier notifier)
         {
             _context = context;
+            _notifier = notifier;
         }
 
         // ─────────────────────────────────────────────
@@ -354,6 +356,8 @@ namespace GreenCycle.Infrastructure.Services
                 ScrapYardName = order.DropOffOrder?.Yard?.ScrapYardName,
                 ScrapYardAddress = order.DropOffOrder?.Yard?.Address,
                 PickupAddress = order.PickUpOrder?.PickupAddress?.FullAddress,
+                PickupLatitude = order.PickUpOrder?.PickupAddress?.Location?.Coordinate.Y,
+                PickupLongitude = order.PickUpOrder?.PickupAddress?.Location?.Coordinate.X,
                 CollectorName = order.PickUpOrder?.Collector?.User?.FullName,
                 CollectorPhone = order.PickUpOrder?.Collector?.User?.Phone,
                 CollectorVehicleType = order.PickUpOrder?.Collector?.VehicleType,
@@ -525,6 +529,7 @@ namespace GreenCycle.Infrastructure.Services
                     PlatformFee = o.PlatformFee ?? 0,
                     CreatedAt = o.CreatedAt ?? DateTime.UtcNow,
                     ItemsCount = o.OrderDetails?.Count ?? 0,
+                    TotalEstimatedWeight = (double)(o.OrderDetails?.Sum(od => od.EstimatedWeight) ?? 0m),
                     SellerName = o.Seller?.FullName,
                     PickupAddress = o.PickUpOrder?.PickupAddress?.FullAddress,
                     DistanceKm = distanceKm,
@@ -627,6 +632,61 @@ namespace GreenCycle.Infrastructure.Services
             order.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // ─────────────────────────────────────────────
+        // 10. CẬP NHẬT VỊ TRÍ COLLECTOR
+        // ─────────────────────────────────────────────
+        public async Task<bool> UpdateCollectorLiveLocationAsync(int orderId, int collectorUserId, double latitude, double longitude)
+        {
+            var collector = await _context.Collectors
+                .FirstOrDefaultAsync(c => c.UserId == collectorUserId)
+                ?? throw new Exception("Tài khoản không hợp lệ.");
+
+            var order = await _context.Orders
+                .Include(o => o.PickUpOrder)
+                .Include(o => o.Seller)
+                .FirstOrDefaultAsync(o => o.OrderId == orderId)
+                ?? throw new Exception("Đơn hàng không tồn tại.");
+
+            if (order.PickUpOrder?.CollectorId != collector.CollectorId)
+                throw new Exception("Tài xế không có quyền cập nhật đơn hàng này.");
+
+            if (order.StatusId >= 4)
+                throw new Exception("Đơn hàng đã hoàn tất hoặc bị hủy.");
+
+            // Update in DB (CollectorLiveLocation)
+            var liveLocation = await _context.CollectorLiveLocations
+                .FirstOrDefaultAsync(l => l.CollectorId == collector.CollectorId);
+
+            var point = new NetTopologySuite.Geometries.Point(longitude, latitude) { SRID = 4326 };
+
+            if (liveLocation == null)
+            {
+                liveLocation = new CollectorLiveLocation
+                {
+                    CollectorId = collector.CollectorId,
+                    Location = point,
+                    LastUpdated = DateTime.UtcNow
+                };
+                _context.CollectorLiveLocations.Add(liveLocation);
+            }
+            else
+            {
+                liveLocation.Location = point;
+                liveLocation.LastUpdated = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Broadcast via SignalR to Seller
+            if (order.Seller?.UserId != null)
+            {
+                // Note: The SignalR service expects string for user id
+                await _notifier.NotifyCollectorLocationAsync(order.Seller.UserId.ToString(), orderId, latitude, longitude);
+            }
+
             return true;
         }
     }

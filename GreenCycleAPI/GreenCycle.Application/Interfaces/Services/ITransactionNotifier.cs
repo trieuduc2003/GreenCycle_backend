@@ -10,5 +10,7 @@ namespace GreenCycle.Application.Interfaces.Services
     public interface ITransactionNotifier
     {
         Task SendDoubleConfirmationAsync(string sellerUserId, DoubleConfirmationPayloadDto payload);
+        Task SendTransactionResultToYardAsync(string yardUserId, TransactionResultPayloadDto payload);
+        Task NotifyCollectorLocationAsync(string sellerUserId, int orderId, double latitude, double longitude);
     }
 }

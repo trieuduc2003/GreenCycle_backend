@@ -22,5 +22,16 @@ namespace GreenCycle.API.Services
         {
             await _hubContext.Clients.User(sellerUserId).SendAsync("ReceiveDoubleConfirmation", payload);
         }
+
+        public async Task SendTransactionResultToYardAsync(string yardUserId, TransactionResultPayloadDto payload)
+        {
+            await _hubContext.Clients.User(yardUserId).SendAsync("ReceiveTransactionResult", payload);
+        }
+
+        public async Task NotifyCollectorLocationAsync(string sellerUserId, int orderId, double latitude, double longitude)
+        {
+            var payload = new { OrderId = orderId, Latitude = latitude, Longitude = longitude };
+            await _hubContext.Clients.User(sellerUserId).SendAsync("CollectorLocationUpdated", payload);
+        }
     }
 }

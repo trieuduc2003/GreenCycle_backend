@@ -8,5 +8,6 @@ namespace GreenCycle.Application.DTOs.Yard
         public string WasteDescription { get; set; }
         public string PointsAwarded { get; set; }
         public string TimeAgo { get; set; }
+        public string OrderType { get; set; }
     }
 }

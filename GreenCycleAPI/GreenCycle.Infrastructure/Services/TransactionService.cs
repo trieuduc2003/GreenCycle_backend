@@ -273,6 +273,30 @@ namespace GreenCycle.Infrastructure.Services
                 await _context.SaveChangesAsync();
                 await dbTransaction.CommitAsync();
 
+                var payload = new TransactionResultPayloadDto
+                {
+                    OrderId = order.OrderId,
+                    IsConfirmed = true,
+                    Message = $"Giao dịch thành công! Người bán đã nhận được {netGreenPoints:N0} GreenPoints."
+                };
+
+                if (order.MethodId == 1) // Drop-off
+                {
+                    var dropOff = await _context.DropOffOrders.Include(d => d.Yard).FirstOrDefaultAsync(d => d.OrderId == order.OrderId);
+                    if (dropOff?.Yard != null)
+                    {
+                        await _notifier.SendTransactionResultToYardAsync(dropOff.Yard.UserId.ToString(), payload);
+                    }
+                }
+                else if (order.MethodId == 2) // Pick-up
+                {
+                    var pickUp = await _context.PickUpOrders.Include(p => p.Collector).FirstOrDefaultAsync(p => p.OrderId == order.OrderId);
+                    if (pickUp?.Collector != null)
+                    {
+                        await _notifier.SendTransactionResultToYardAsync(pickUp.Collector.UserId.ToString(), payload);
+                    }
+                }
+
                 return new ApiResponse<object>
                 {
                     Success = true,

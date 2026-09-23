@@ -37,5 +37,8 @@ namespace GreenCycle.Application.Interfaces.Services
 
         /// <summary>Cập nhật trạng thái đơn Pick-up (InProgress=3, Cancelled=5). Completed xử lý qua TransactionService.</summary>
         Task<bool> UpdatePickupOrderStatusAsync(int orderId, int collectorUserId, int newStatusId);
+
+        /// <summary>Cập nhật vị trí trực tiếp của Collector và gửi SignalR đến Seller.</summary>
+        Task<bool> UpdateCollectorLiveLocationAsync(int orderId, int collectorUserId, double latitude, double longitude);
     }
 }

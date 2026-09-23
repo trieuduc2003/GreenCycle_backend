@@ -164,10 +164,10 @@ D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticweb
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticwebassets.development.json
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\swae.build.ex.cache
-D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\GreenCyc.C8638E71.Up2Date
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\GreenCycle.API.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\refint\GreenCycle.API.dll
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\GreenCycle.API.pdb
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\GreenCycle.API.genruntimeconfig.cache
 D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\ref\GreenCycle.API.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

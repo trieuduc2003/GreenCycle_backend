@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GreenCycle.Domain.Entities;
 
 namespace GreenCycle.Infrastructure.Services
 {
@@ -87,30 +88,51 @@ namespace GreenCycle.Infrastructure.Services
             var yard = await _context.ScrapYards.FirstOrDefaultAsync(y => y.UserId == userId);
             if (yard == null) throw new Exception("Không tìm thấy vựa của bạn.");
 
+            var collector = await _context.Collectors.FirstOrDefaultAsync(c => c.UserId == userId);
+
             var today = DateTime.UtcNow.Date;
             
-            var ordersToday = await _context.DropOffOrders
+            var dropOffOrders = await _context.DropOffOrders
                 .Include(d => d.Order)
                 .ThenInclude(o => o.OrderDetails)
                 .Where(d => d.YardId == yard.YardId 
-                       && d.Order.StatusId == 4 // 4 = Completed (Giả sử)
+                       && d.Order.StatusId == 4 // 4 = Completed
                        && d.Order.CreatedAt >= today)
                 .Select(d => d.Order)
                 .ToListAsync();
 
-            var totalCustomers = ordersToday.Select(o => o.SellerId).Distinct().Count();
+            var pickUpOrders = collector != null ? await _context.PickUpOrders
+                .Include(p => p.Order)
+                .ThenInclude(o => o.OrderDetails)
+                .Where(p => p.CollectorId == collector.CollectorId
+                       && p.Order.StatusId == 4
+                       && p.Order.CreatedAt >= today)
+                .Select(p => p.Order)
+                .ToListAsync() : new List<Order>();
+
+            var totalCustomers = dropOffOrders.Select(o => o.SellerId)
+                .Concat(pickUpOrders.Select(o => o.SellerId))
+                .Distinct().Count();
             
-            var totalKg = ordersToday.SelectMany(o => o.OrderDetails)
+            var dropOffKg = dropOffOrders.SelectMany(o => o.OrderDetails)
                 .Where(od => od.ActualWeight.HasValue)
                 .Sum(od => od.ActualWeight.Value);
+            var dropOffRevenue = dropOffOrders.Sum(o => o.TotalActualAmount ?? 0);
 
-            var totalRevenue = ordersToday.Sum(o => o.TotalActualAmount ?? 0);
+            var pickUpKg = pickUpOrders.SelectMany(o => o.OrderDetails)
+                .Where(od => od.ActualWeight.HasValue)
+                .Sum(od => od.ActualWeight.Value);
+            var pickUpRevenue = pickUpOrders.Sum(o => o.TotalActualAmount ?? 0);
 
             return new YardStatsDto
             {
                 TotalCustomers = totalCustomers,
-                TotalKgCollected = (double)totalKg,
-                TotalRevenue = (double)totalRevenue
+                DropOffKg = (double)dropOffKg,
+                DropOffRevenue = (double)dropOffRevenue,
+                PickUpKg = (double)pickUpKg,
+                PickUpRevenue = (double)pickUpRevenue,
+                TotalKgCollected = (double)(dropOffKg + pickUpKg),
+                TotalRevenue = (double)(dropOffRevenue + pickUpRevenue)
             };
         }
 
@@ -119,6 +141,8 @@ namespace GreenCycle.Infrastructure.Services
             var yard = await _context.ScrapYards.FirstOrDefaultAsync(y => y.UserId == userId);
             if (yard == null) throw new Exception("Không tìm thấy vựa của bạn.");
 
+            var collector = await _context.Collectors.FirstOrDefaultAsync(c => c.UserId == userId);
+            
             var result = new List<YardChartDataDto>();
             var today = DateTime.UtcNow.Date;
 
@@ -131,7 +155,7 @@ namespace GreenCycle.Infrastructure.Services
                     var targetDate = new DateTime(year.Value, month.Value, i, 0, 0, 0, DateTimeKind.Utc);
                     var nextDate = targetDate.AddDays(1);
 
-                    var ordersOnDay = await _context.DropOffOrders
+                    var dropOffOrders = await _context.DropOffOrders
                         .Include(d => d.Order)
                             .ThenInclude(o => o.OrderDetails)
                         .Where(d => d.YardId == yard.YardId
@@ -141,17 +165,31 @@ namespace GreenCycle.Infrastructure.Services
                         .Select(d => d.Order)
                         .ToListAsync();
 
-                    var totalKg = ordersOnDay.SelectMany(o => o.OrderDetails)
-                        .Where(od => od.ActualWeight.HasValue)
-                        .Sum(od => od.ActualWeight.Value);
+                    var pickUpOrders = collector != null ? await _context.PickUpOrders
+                        .Include(p => p.Order)
+                        .ThenInclude(o => o.OrderDetails)
+                        .Where(p => p.CollectorId == collector.CollectorId
+                                 && p.Order.StatusId == 4
+                                 && p.Order.CreatedAt >= targetDate
+                                 && p.Order.CreatedAt < nextDate)
+                        .Select(p => p.Order)
+                        .ToListAsync() : new List<Order>();
 
-                    var totalRevenue = ordersOnDay.Sum(o => o.TotalActualAmount ?? 0);
+                    var dropOffKg = dropOffOrders.SelectMany(o => o.OrderDetails).Where(od => od.ActualWeight.HasValue).Sum(od => od.ActualWeight.Value);
+                    var dropOffRevenue = dropOffOrders.Sum(o => o.TotalActualAmount ?? 0);
+
+                    var pickUpKg = pickUpOrders.SelectMany(o => o.OrderDetails).Where(od => od.ActualWeight.HasValue).Sum(od => od.ActualWeight.Value);
+                    var pickUpRevenue = pickUpOrders.Sum(o => o.TotalActualAmount ?? 0);
 
                     result.Add(new YardChartDataDto
                     {
                         Date = targetDate.ToString("dd/MM"),
-                        TotalKg = (double)totalKg,
-                        TotalRevenue = (double)totalRevenue
+                        DropOffKg = (double)dropOffKg,
+                        DropOffRevenue = (double)dropOffRevenue,
+                        PickUpKg = (double)pickUpKg,
+                        PickUpRevenue = (double)pickUpRevenue,
+                        TotalKg = (double)(dropOffKg + pickUpKg),
+                        TotalRevenue = (double)(dropOffRevenue + pickUpRevenue)
                     });
                 }
             }
@@ -163,7 +201,7 @@ namespace GreenCycle.Infrastructure.Services
                     var targetDate = today.AddDays(-i);
                     var nextDate = targetDate.AddDays(1);
 
-                    var ordersOnDay = await _context.DropOffOrders
+                    var dropOffOrders = await _context.DropOffOrders
                         .Include(d => d.Order)
                             .ThenInclude(o => o.OrderDetails)
                         .Where(d => d.YardId == yard.YardId
@@ -173,17 +211,31 @@ namespace GreenCycle.Infrastructure.Services
                         .Select(d => d.Order)
                         .ToListAsync();
 
-                    var totalKg = ordersOnDay.SelectMany(o => o.OrderDetails)
-                        .Where(od => od.ActualWeight.HasValue)
-                        .Sum(od => od.ActualWeight.Value);
+                    var pickUpOrders = collector != null ? await _context.PickUpOrders
+                        .Include(p => p.Order)
+                        .ThenInclude(o => o.OrderDetails)
+                        .Where(p => p.CollectorId == collector.CollectorId
+                                 && p.Order.StatusId == 4
+                                 && p.Order.CreatedAt >= targetDate
+                                 && p.Order.CreatedAt < nextDate)
+                        .Select(p => p.Order)
+                        .ToListAsync() : new List<Order>();
 
-                    var totalRevenue = ordersOnDay.Sum(o => o.TotalActualAmount ?? 0);
+                    var dropOffKg = dropOffOrders.SelectMany(o => o.OrderDetails).Where(od => od.ActualWeight.HasValue).Sum(od => od.ActualWeight.Value);
+                    var dropOffRevenue = dropOffOrders.Sum(o => o.TotalActualAmount ?? 0);
+
+                    var pickUpKg = pickUpOrders.SelectMany(o => o.OrderDetails).Where(od => od.ActualWeight.HasValue).Sum(od => od.ActualWeight.Value);
+                    var pickUpRevenue = pickUpOrders.Sum(o => o.TotalActualAmount ?? 0);
 
                     result.Add(new YardChartDataDto
                     {
                         Date = targetDate.ToString("dd/MM"),
-                        TotalKg = (double)totalKg,
-                        TotalRevenue = (double)totalRevenue
+                        DropOffKg = (double)dropOffKg,
+                        DropOffRevenue = (double)dropOffRevenue,
+                        PickUpKg = (double)pickUpKg,
+                        PickUpRevenue = (double)pickUpRevenue,
+                        TotalKg = (double)(dropOffKg + pickUpKg),
+                        TotalRevenue = (double)(dropOffRevenue + pickUpRevenue)
                     });
                 }
             }
@@ -196,21 +248,40 @@ namespace GreenCycle.Infrastructure.Services
             var yard = await _context.ScrapYards.FirstOrDefaultAsync(y => y.UserId == userId);
             if (yard == null) throw new Exception("Không tìm thấy vựa của bạn.");
 
-            var recentOrders = await _context.DropOffOrders
-                .Include(d => d.Order)
-                    .ThenInclude(o => o.Seller)
-                .Include(d => d.Order)
-                    .ThenInclude(o => o.OrderDetails)
-                        .ThenInclude(od => od.Category)
+            var collector = await _context.Collectors.FirstOrDefaultAsync(c => c.UserId == userId);
+
+            var dropOffOrders = await _context.DropOffOrders
+                .Include(d => d.Order).ThenInclude(o => o.Seller)
+                .Include(d => d.Order).ThenInclude(o => o.OrderDetails).ThenInclude(od => od.Category)
                 .Where(d => d.YardId == yard.YardId && d.Order.StatusId == 4)
-                .OrderByDescending(d => d.Order.UpdatedAt)
-                .Take(5)
+                .Select(d => new { Order = d.Order, Type = "Drop-off" })
                 .ToListAsync();
+
+            var pickUpOrdersDynamic = new List<dynamic>();
+            if (collector != null) 
+            {
+                var pickUpOrders = await _context.PickUpOrders
+                    .Include(p => p.Order).ThenInclude(o => o.Seller)
+                    .Include(p => p.Order).ThenInclude(o => o.OrderDetails).ThenInclude(od => od.Category)
+                    .Where(p => p.CollectorId == collector.CollectorId && p.Order.StatusId == 4)
+                    .Select(p => new { Order = p.Order, Type = "Pick-up" })
+                    .ToListAsync();
+                pickUpOrdersDynamic = pickUpOrders.Cast<dynamic>().ToList();
+            }
+
+            var recentOrders = dropOffOrders.Cast<dynamic>()
+                .Concat(pickUpOrdersDynamic)
+                .OrderByDescending(x => (DateTime?)x.Order.UpdatedAt ?? (DateTime?)x.Order.CreatedAt ?? DateTime.UtcNow)
+                .Take(5)
+                .ToList();
 
             var result = new List<YardActivityDto>();
             foreach(var d in recentOrders)
             {
-                var o = d.Order;
+                var o = d.Order as Order;
+                var type = d.Type as string;
+                if (o == null) continue;
+
                 var wasteDesc = string.Join(", ", o.OrderDetails.Where(od => od.ActualWeight.HasValue).Select(od => $"{od.ActualWeight} {od.Category.Unit} {od.Category.Name}"));
                 if (string.IsNullOrEmpty(wasteDesc)) wasteDesc = "Không xác định";
 
@@ -227,7 +298,8 @@ namespace GreenCycle.Infrastructure.Services
                     CustomerName = o.Seller?.FullName ?? "Khách hàng",
                     WasteDescription = wasteDesc,
                     PointsAwarded = $"{points:N0} GP",
-                    TimeAgo = timeSpan.TotalMinutes < 1 ? "Vừa xong" : timeAgo
+                    TimeAgo = timeSpan.TotalMinutes < 1 ? "Vừa xong" : timeAgo,
+                    OrderType = type
                 });
             }
 

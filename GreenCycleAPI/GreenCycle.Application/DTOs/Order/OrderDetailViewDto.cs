@@ -25,6 +25,8 @@ namespace GreenCycle.Application.DTOs.Order
         public string? ScrapYardName { get; set; }
         public string? ScrapYardAddress { get; set; }
         public string? PickupAddress { get; set; }
+        public double? PickupLatitude { get; set; }
+        public double? PickupLongitude { get; set; }
         public string? CollectorName { get; set; }
         public string? CollectorPhone { get; set; }
         public string? CollectorVehicleType { get; set; }

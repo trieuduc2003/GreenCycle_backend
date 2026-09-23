@@ -107,6 +107,27 @@
   },
   {
     "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "UpdateCollectorLocation",
+    "RelativePath": "api/Orders/{orderId}/collector-location",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "GreenCycle.API.Controllers.CollectorLocationUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
     "Method": "GetOrderDetails",
     "RelativePath": "api/Orders/{orderId}/details",
     "HttpMethod": "GET",

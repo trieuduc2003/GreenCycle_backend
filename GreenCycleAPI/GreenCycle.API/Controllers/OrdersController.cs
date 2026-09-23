@@ -195,11 +195,6 @@ public class OrdersController : ControllerBase
             return BadRequest(new { Success = false, Message = ex.Message });
         }
     }
-
-    // ═══════════════════════════════════════════════════════════
-    // PICK-UP LIFECYCLE ENDPOINTS
-    // ═══════════════════════════════════════════════════════════
-
     /// <summary>
     /// [Collector, YardOwner] Lấy danh sách đơn Pick-up đang chờ tài xế nhận (StatusId = 1 hoặc 2).
     /// </summary>
@@ -269,11 +264,44 @@ public class OrdersController : ControllerBase
             }
 
             var result = await _orderService.UpdatePickupOrderStatusAsync(orderId, collectorUserId, newStatusId);
-            return Ok(new { Success = result, Message = "Đã cập nhật trạng thái đơn hàng." });
+            return Ok(new { Success = result, Message = "Cập nhật trạng thái đơn hàng thành công." });
         }
         catch (Exception ex)
         {
             return BadRequest(new { Success = false, Message = ex.Message });
         }
     }
+
+    /// <summary>
+    /// [Collector] Cập nhật vị trí trực tiếp và gửi thông báo đến Seller
+    /// </summary>
+    [HttpPut("{orderId:int}/collector-location")]
+    [Authorize(Roles = "Collector")]
+    public async Task<IActionResult> UpdateCollectorLocation(int orderId, [FromBody] CollectorLocationUpdateDto dto)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)
+                           ?? User.FindFirst("userId")
+                           ?? User.FindFirst("sub");
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var collectorUserId))
+            {
+                return Unauthorized(new { Success = false, Message = "Không thể xác định người dùng." });
+            }
+
+            var result = await _orderService.UpdateCollectorLiveLocationAsync(orderId, collectorUserId, dto.Latitude, dto.Longitude);
+            return Ok(new { Success = result, Message = "Cập nhật vị trí thành công." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Success = false, Message = ex.Message });
+        }
+    }
+}
+
+public class CollectorLocationUpdateDto
+{
+    public double Latitude { get; set; }
+    public double Longitude { get; set; }
 }
