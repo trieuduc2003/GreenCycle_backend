@@ -1,0 +1,12 @@
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\bin\Release\net8.0\GreenCycle.Domain.deps.json
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\bin\Release\net8.0\GreenCycle.Domain.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\bin\Release\net8.0\GreenCycle.Domain.pdb
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\obj\Release\net8.0\GreenCycle.Domain.csproj.AssemblyReference.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\obj\Release\net8.0\GreenCycle.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\obj\Release\net8.0\GreenCycle.Domain.AssemblyInfoInputs.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\obj\Release\net8.0\GreenCycle.Domain.AssemblyInfo.cs
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\obj\Release\net8.0\GreenCycle.Domain.csproj.CoreCompileInputs.cache
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\obj\Release\net8.0\GreenCycle.Domain.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\obj\Release\net8.0\refint\GreenCycle.Domain.dll
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\obj\Release\net8.0\GreenCycle.Domain.pdb
+D:\GreenCycle\SourceCode\GreenCycleAPI\GreenCycle.Domain\obj\Release\net8.0\ref\GreenCycle.Domain.dll

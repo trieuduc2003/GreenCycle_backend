@@ -23,6 +23,10 @@ builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ITransactionNotifier, GreenCycle.API.Services.SignalRTransactionNotifier>();
+builder.Services.AddScoped<IVoucherService, VoucherService>();
+builder.Services.AddScoped<IScrapYardService, ScrapYardService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserAddressService, UserAddressService>();
 builder.Services.AddMemoryCache(); // Dùng để lưu OTP tạm thời
 
 

@@ -20,6 +20,9 @@ namespace GreenCycle.API.Controllers
             _transactionService = transactionService;
         }
 
+        /// <summary>
+        /// [ScrapYard] Chủ Vựa nhập cân thực tế → gửi Double Confirmation tới Seller (Drop-off).
+        /// </summary>
         [HttpPost("initiate")]
         [Authorize(Roles = "ScrapYard,Collector")]
         public async Task<IActionResult> InitiateTransaction([FromBody] InitiateTransactionRequestDto request)
@@ -32,6 +35,24 @@ namespace GreenCycle.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// [Collector] Tài xế nhập cân thực tế → gửi Double Confirmation tới Seller (Pick-up).
+        /// </summary>
+        [HttpPost("pickup-initiate")]
+        [Authorize(Roles = "Collector")]
+        public async Task<IActionResult> InitiatePickupTransaction([FromBody] InitiateTransactionRequestDto request)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId))
+                return Unauthorized(new ApiResponse<object> { Success = false, Message = "Lỗi xác thực người dùng." });
+
+            var result = await _transactionService.InitiatePickupTransactionAsync(userId, request);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// [Seller] Xác nhận giao dịch sau khi nhận Double Confirmation popup.
+        /// </summary>
         [HttpPost("confirm")]
         [Authorize(Roles = "Seller")]
         public async Task<IActionResult> ConfirmTransaction([FromBody] ConfirmTransactionRequestDto request)

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace GreenCycle.Application.DTOs.Auth
 {
+    /// <summary>Response trả về sau khi đăng nhập hoặc đăng ký thành công.</summary>
     public class AuthResponseDto
     {
         public int UserId { get; set; }

@@ -75,6 +75,7 @@ namespace GreenCycle.Infrastructure.Services
             var payload = new DoubleConfirmationPayloadDto
             {
                 OrderId = order.OrderId,
+                MethodId = order.MethodId,
                 YardName = yard.ScrapYardName,
                 TotalActualAmount = totalActualAmount,
                 PlatformFee = platformFee,
@@ -93,7 +94,82 @@ namespace GreenCycle.Infrastructure.Services
         }
 
         // ─────────────────────────────────────────────
-        // 2. CONFIRM: Người Bán bấm "Đồng ý" → Hệ thống cập nhật ví (ACID Transaction)
+        // 2. INITIATE PICKUP: Tài xế nhập cân thực tế → gửi Pop-up tới Người Bán
+        // ─────────────────────────────────────────────
+        public async Task<ApiResponse<DoubleConfirmationPayloadDto>> InitiatePickupTransactionAsync(int collectorUserId, InitiateTransactionRequestDto request)
+        {
+            // Tìm Collector theo UserId
+            var collector = await _context.Collectors
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.UserId == collectorUserId)
+                ?? throw new Exception("Tài khoản không phải Tài xế hoặc chưa đăng ký.");
+
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .Include(o => o.PickUpOrder)
+                .FirstOrDefaultAsync(o => o.OrderId == request.OrderId)
+                ?? throw new Exception("Đơn hàng không tồn tại.");
+
+            if (order.MethodId != 2)
+                throw new Exception("Đơn hàng này không phải loại Pick-up.");
+
+            // Chấp nhận StatusId=2 (DriverAssigned) hoặc StatusId=1 (Pending)
+            if (order.StatusId != 1 && order.StatusId != 2)
+                throw new Exception("Đơn hàng không ở trạng thái hợp lệ để nhập cân.");
+
+            // Kiểm tra tài xế có phải người được gán không (nếu đã gán)
+            if (order.PickUpOrder?.CollectorId != null && order.PickUpOrder.CollectorId != collector.CollectorId)
+                throw new Exception("Tài xế không được phép thao tác trên đơn hàng này.");
+
+            // Cập nhật khối lượng thực tế
+            decimal totalActualAmount = 0;
+            foreach (var detail in order.OrderDetails)
+            {
+                var reqActual = request.ActualWeights.FirstOrDefault(aw => aw.OrderDetailId == detail.OrderDetailId);
+                if (reqActual != null)
+                {
+                    detail.ActualWeight = reqActual.ActualWeight;
+                    detail.ActualSubTotal = detail.ActualWeight * detail.UnitPrice;
+                    totalActualAmount += detail.ActualSubTotal ?? 0;
+                }
+            }
+
+            // Pick-up: Seller chịu 20% phí tiện lợi
+            decimal platformFee = totalActualAmount * 0.20m;
+            decimal netGreenPoints = totalActualAmount - platformFee;
+
+            order.TotalActualAmount = totalActualAmount;
+            order.PlatformFee = platformFee;
+            order.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            var collectorName = collector.User?.FullName ?? "Tài xế GreenCycle";
+            var collectorPhone = collector.User?.Phone ?? "";
+
+            var payload = new DoubleConfirmationPayloadDto
+            {
+                OrderId = order.OrderId,
+                MethodId = order.MethodId,
+                YardName = string.Empty,
+                CollectorName = collectorName,
+                CollectorPhone = collectorPhone,
+                TotalActualAmount = totalActualAmount,
+                PlatformFee = platformFee,
+                NetGreenPoints = netGreenPoints
+            };
+
+            await _notifier.SendDoubleConfirmationAsync(order.SellerId.ToString(), payload);
+
+            return new ApiResponse<DoubleConfirmationPayloadDto>
+            {
+                Success = true,
+                Message = "Đã gửi yêu cầu xác nhận chéo tới Người bán.",
+                Data = payload
+            };
+        }
+
+        // ─────────────────────────────────────────────
+        // 3. CONFIRM: Người Bán bấm "Đồng ý" → Hệ thống cập nhật ví (ACID Transaction)
         // ─────────────────────────────────────────────
         public async Task<ApiResponse<object>> ConfirmTransactionAsync(int sellerUserId, ConfirmTransactionRequestDto request)
         {
@@ -196,6 +272,30 @@ namespace GreenCycle.Infrastructure.Services
 
                 await _context.SaveChangesAsync();
                 await dbTransaction.CommitAsync();
+
+                var payload = new TransactionResultPayloadDto
+                {
+                    OrderId = order.OrderId,
+                    IsConfirmed = true,
+                    Message = $"Giao dịch thành công! Người bán đã nhận được {netGreenPoints:N0} GreenPoints."
+                };
+
+                if (order.MethodId == 1) // Drop-off
+                {
+                    var dropOff = await _context.DropOffOrders.Include(d => d.Yard).FirstOrDefaultAsync(d => d.OrderId == order.OrderId);
+                    if (dropOff?.Yard != null)
+                    {
+                        await _notifier.SendTransactionResultToYardAsync(dropOff.Yard.UserId.ToString(), payload);
+                    }
+                }
+                else if (order.MethodId == 2) // Pick-up
+                {
+                    var pickUp = await _context.PickUpOrders.Include(p => p.Collector).FirstOrDefaultAsync(p => p.OrderId == order.OrderId);
+                    if (pickUp?.Collector != null)
+                    {
+                        await _notifier.SendTransactionResultToYardAsync(pickUp.Collector.UserId.ToString(), payload);
+                    }
+                }
 
                 return new ApiResponse<object>
                 {
