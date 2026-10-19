@@ -23,45 +23,65 @@ namespace GreenCycle.Infrastructure.Services
 
         public async Task<List<ScrapYardDto>> GetNearbyYardsAsync(double latitude, double longitude, double radiusMeters, int limit)
         {
-            // Create a Point for the user's location (SRID 4326 for WGS84 GPS coords)
-            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
-            // Note: NTS Point takes (Longitude, Latitude)
-            var userLocation = geometryFactory.CreatePoint(new Coordinate(longitude, latitude));
+            if (radiusMeters <= 0) radiusMeters = 10000; // Mặc định bán kính 10km
+            if (limit <= 0) limit = 20;
 
-            // Fetch yards within radius, ordered by distance
-            var yards = await _context.ScrapYards
-                .Where(y => y.Location != null && y.Location.IsWithinDistance(userLocation, radiusMeters))
-                .OrderBy(y => y.Location.Distance(userLocation))
-                .Take(limit)
+            // Lấy tất cả các vựa có tọa độ Location
+            var rawYards = await _context.ScrapYards
+                .Include(y => y.User)
+                .Where(y => y.Location != null && !y.Location.IsEmpty)
                 .Select(y => new
                 {
                     y.YardId,
                     y.ScrapYardName,
                     y.Address,
-                    y.Location,
-                    DistanceMeters = y.Location.Distance(userLocation),
-                    IsOpening = y.IsOpening ?? false
+                    y.OperatingHours,
+                    Ranking = (double)(y.Ranking ?? 5.0m),
+                    IsOpening = y.IsOpening ?? false,
+                    Phone = y.User.Phone,
+                    Latitude = y.Location.Coordinate.Y,
+                    Longitude = y.Location.Coordinate.X
                 })
                 .ToListAsync();
 
-            var result = new List<ScrapYardDto>();
-            foreach (var y in yards)
-            {
-                var point = y.Location as Point;
-                result.Add(new ScrapYardDto
+            // Tính khoảng cách chính xác từng mét theo công thức Haversine
+            var yardsWithDistance = rawYards
+                .Select(y =>
                 {
-                    YardId = y.YardId,
-                    Name = y.ScrapYardName,
-                    Address = y.Address,
-                    Latitude = point?.Y ?? 0,
-                    Longitude = point?.X ?? 0,
-                    DistanceMeters = y.DistanceMeters,
-                    DistanceFormatted = FormatDistance(y.DistanceMeters),
-                    IsOpening = y.IsOpening
-                });
-            }
+                    var dist = CalculateDistanceMeters(latitude, longitude, y.Latitude, y.Longitude);
+                    return new ScrapYardDto
+                    {
+                        YardId = y.YardId,
+                        Name = y.ScrapYardName,
+                        Address = y.Address,
+                        OperatingHours = y.OperatingHours,
+                        Ranking = y.Ranking,
+                        Phone = y.Phone,
+                        Latitude = y.Latitude,
+                        Longitude = y.Longitude,
+                        DistanceMeters = dist,
+                        DistanceFormatted = FormatDistance(dist),
+                        IsOpening = y.IsOpening
+                    };
+                })
+                .Where(y => y.DistanceMeters <= radiusMeters)
+                .OrderBy(y => y.DistanceMeters) // Sắp xếp từ gần nhất đến xa nhất
+                .Take(limit)
+                .ToList();
 
-            return result;
+            return yardsWithDistance;
+        }
+
+        private static double CalculateDistanceMeters(double lat1, double lon1, double lat2, double lon2)
+        {
+            const double R = 6371000; // Bán kính Trái Đất theo mét
+            var dLat = (lat2 - lat1) * Math.PI / 180.0;
+            var dLon = (lon2 - lon1) * Math.PI / 180.0;
+            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                    Math.Cos(lat1 * Math.PI / 180.0) * Math.Cos(lat2 * Math.PI / 180.0) *
+                    Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return R * c;
         }
 
         private string FormatDistance(double distanceInMeters)
@@ -336,6 +356,19 @@ namespace GreenCycle.Infrastructure.Services
             {
                 yard.Location = new NetTopologySuite.Geometries.Point(longitude.Value, latitude.Value) { SRID = 4326 };
             }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ReviewYardAsync(int yardId, int rating, string? comment)
+        {
+            var yard = await _context.ScrapYards.FirstOrDefaultAsync(y => y.YardId == yardId);
+            if (yard == null) return false;
+
+            decimal currentRanking = yard.Ranking ?? 5.0m;
+            // Tính trung bình lũy tiến
+            yard.Ranking = Math.Round((currentRanking * 4m + (decimal)rating) / 5m, 1);
 
             await _context.SaveChangesAsync();
             return true;

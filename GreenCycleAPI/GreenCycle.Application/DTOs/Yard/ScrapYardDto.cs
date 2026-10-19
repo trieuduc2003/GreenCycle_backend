@@ -15,5 +15,8 @@ namespace GreenCycle.Application.DTOs.Yard
         public string DistanceFormatted { get; set; } = string.Empty;
         
         public bool IsOpening { get; set; }
+        public string? OperatingHours { get; set; }
+        public double Ranking { get; set; } = 5.0;
+        public string? Phone { get; set; }
     }
 }

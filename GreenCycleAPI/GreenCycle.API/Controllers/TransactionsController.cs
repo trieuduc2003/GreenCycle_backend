@@ -54,7 +54,7 @@ namespace GreenCycle.API.Controllers
         /// [Seller] Xác nhận giao dịch sau khi nhận Double Confirmation popup.
         /// </summary>
         [HttpPost("confirm")]
-        [Authorize(Roles = "Seller")]
+        [Authorize(Roles = "Seller,Collector")]
         public async Task<IActionResult> ConfirmTransaction([FromBody] ConfirmTransactionRequestDto request)
         {
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);

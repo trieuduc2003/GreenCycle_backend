@@ -10,6 +10,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Hỗ trợ Render tự gán cổng PORT linh hoạt
+var renderPort = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(renderPort))
+{
+    builder.WebHost.UseUrls($"http://*:{renderPort}");
+}
+
 // 1. Cấu hình DB Context
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -28,6 +35,8 @@ builder.Services.AddScoped<IScrapYardService, ScrapYardService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserAddressService, UserAddressService>();
 builder.Services.AddMemoryCache(); // Dùng để lưu OTP tạm thời
+builder.Services.AddScoped<IOtpSender, EmailOtpSender>(); // Gửi mã OTP qua Email (Gmail SMTP / Cloud)
+builder.Services.AddHttpClient<IPushNotificationService, FcmPushNotificationService>(c => c.Timeout = TimeSpan.FromSeconds(10)); // Firebase Cloud Messaging Push Notification
 
 
 // 3. Cấu hình JWT Authentication
@@ -50,6 +59,21 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+    };
+
+    // Đọc token từ query string 'access_token' cho kết nối WebSocket SignalR
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 
@@ -103,13 +127,18 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// Kích hoạt Swagger UI ngay tại trang chủ để dễ dàng test trên Render
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "GreenCycle API v1");
+    c.RoutePrefix = string.Empty; // Truy cập trực tiếp link Render là ra Swagger
+});
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 
 // Kích hoạt CORS (Phải đặt trước UseAuthentication và UseAuthorization)
 app.UseCors("AllowAll");
