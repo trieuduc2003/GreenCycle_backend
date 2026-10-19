@@ -33,5 +33,16 @@ namespace GreenCycle.API.Services
             var payload = new { OrderId = orderId, Latitude = latitude, Longitude = longitude };
             await _hubContext.Clients.User(sellerUserId).SendAsync("CollectorLocationUpdated", payload);
         }
+
+        public async Task NotifyGeofenceApproachingAsync(string sellerUserId, int orderId, double distanceMeters)
+        {
+            var payload = new 
+            { 
+                OrderId = orderId, 
+                DistanceMeters = Math.Round(distanceMeters, 0),
+                Message = $"Tài xế đang đến rất gần (cách bạn ~{Math.Round(distanceMeters, 0)}m). Vui lòng chuẩn bị sẵn rác nhé!" 
+            };
+            await _hubContext.Clients.User(sellerUserId).SendAsync("CollectorApproaching", payload);
+        }
     }
 }

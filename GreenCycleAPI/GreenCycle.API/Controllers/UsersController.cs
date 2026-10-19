@@ -13,11 +13,13 @@ public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IUserAddressService _addressService;
+    private readonly IPushNotificationService _pushService;
 
-    public UsersController(IUserService userService, IUserAddressService addressService)
+    public UsersController(IUserService userService, IUserAddressService addressService, IPushNotificationService pushService)
     {
         _userService    = userService;
         _addressService = addressService;
+        _pushService    = pushService;
     }
 
     // ─── Helper lấy userId từ JWT ──────────────────────────────────────────
@@ -150,5 +152,21 @@ public class UsersController : ControllerBase
         {
             return BadRequest(new { Success = false, Message = ex.Message });
         }
+    }
+
+    public class RegisterFcmTokenRequest
+    {
+        public string Token { get; set; } = null!;
+    }
+
+    /// <summary>Đăng ký FCM Device Token để nhận thông báo đẩy khi đóng ứng dụng.</summary>
+    [HttpPost("fcm-token")]
+    public IActionResult RegisterFcmToken([FromBody] RegisterFcmTokenRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == null) return Unauthorized(new { Success = false, Message = "Không thể xác định người dùng." });
+
+        _pushService.RegisterDeviceToken(userId.Value, request.Token);
+        return Ok(new { Success = true, Message = "Đã lưu FCM Device Token thành công." });
     }
 }

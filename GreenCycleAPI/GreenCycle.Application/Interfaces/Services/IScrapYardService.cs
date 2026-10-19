@@ -13,5 +13,6 @@ namespace GreenCycle.Application.Interfaces.Services
         Task<List<YardActivityDto>> GetRecentActivitiesAsync(int userId);
         Task<YardProfileDto> GetYardProfileAsync(int userId);
         Task<bool> UpdateYardProfileAsync(int userId, string name, string address, string operatingHours, double? latitude = null, double? longitude = null);
+        Task<bool> ReviewYardAsync(int yardId, int rating, string? comment);
     }
 }

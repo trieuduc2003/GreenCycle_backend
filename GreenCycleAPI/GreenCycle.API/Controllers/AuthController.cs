@@ -62,7 +62,12 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new { Success = false, Message = ex.Message });
+            var msg = ex.Message;
+            if (msg.Contains("SHUTDOWN") || msg.Contains("Login failed") || msg.Contains("administrators may connect") || msg.Contains("network-related"))
+            {
+                msg = "Máy chủ cơ sở dữ liệu đang bảo trì/khởi động lại trong giây lát. Vui lòng thử lại sau 1-2 phút.";
+            }
+            return BadRequest(new { Success = false, Message = msg });
         }
     }
 
@@ -76,6 +81,49 @@ public class AuthController : ControllerBase
         {
             var result = await _authService.GoogleLoginAsync(request);
             return Ok(new { Success = true, Message = "Đăng nhập Google thành công!", Data = result });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Success = false, Message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Health check để Mobile App đánh thức server Render từ trạng thái Sleep.
+    /// </summary>
+    [HttpGet("health")]
+    public IActionResult HealthCheck()
+    {
+        return Ok(new { Status = "Healthy", ServerTime = DateTime.UtcNow });
+    }
+
+    /// <summary>
+    /// Quên mật khẩu: Gửi OTP xác thực đến Email của tài khoản.
+    /// </summary>
+    [HttpPost("forgot-password/send-otp")]
+    public async Task<IActionResult> ForgotPasswordSendOtp([FromBody] ForgotPasswordOtpRequestDto request)
+    {
+        try
+        {
+            await _authService.SendForgotPasswordOtpAsync(request);
+            return Ok(new { Success = true, Message = "Mã OTP đã được gửi đến email của bạn! Vui lòng kiểm tra hòm thư." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Success = false, Message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Đặt lại mật khẩu mới sau khi xác thực mã OTP gửi về Email.
+    /// </summary>
+    [HttpPost("forgot-password/reset")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto request)
+    {
+        try
+        {
+            await _authService.ResetPasswordAsync(request);
+            return Ok(new { Success = true, Message = "Đặt lại mật khẩu thành công! Vui lòng đăng nhập với mật khẩu mới." });
         }
         catch (Exception ex)
         {

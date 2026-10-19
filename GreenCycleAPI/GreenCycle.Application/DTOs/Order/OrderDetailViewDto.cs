@@ -24,6 +24,7 @@ namespace GreenCycle.Application.DTOs.Order
         // Thông tin địa điểm hoặc đối tác tiếp nhận
         public string? ScrapYardName { get; set; }
         public string? ScrapYardAddress { get; set; }
+        public string? ScrapYardPhone { get; set; }
         public string? PickupAddress { get; set; }
         public double? PickupLatitude { get; set; }
         public double? PickupLongitude { get; set; }

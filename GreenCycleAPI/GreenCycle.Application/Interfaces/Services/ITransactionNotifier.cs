@@ -12,5 +12,6 @@ namespace GreenCycle.Application.Interfaces.Services
         Task SendDoubleConfirmationAsync(string sellerUserId, DoubleConfirmationPayloadDto payload);
         Task SendTransactionResultToYardAsync(string yardUserId, TransactionResultPayloadDto payload);
         Task NotifyCollectorLocationAsync(string sellerUserId, int orderId, double latitude, double longitude);
+        Task NotifyGeofenceApproachingAsync(string sellerUserId, int orderId, double distanceMeters);
     }
 }

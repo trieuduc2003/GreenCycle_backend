@@ -23,7 +23,7 @@ namespace GreenCycle.API.Controllers
         /// Tìm các vựa rác gần vị trí người dùng.
         /// </summary>
         [HttpGet("nearby")]
-        public async Task<IActionResult> GetNearbyYards([FromQuery] double lat, [FromQuery] double lng, [FromQuery] double radius = 5000, [FromQuery] int limit = 10)
+        public async Task<IActionResult> GetNearbyYards([FromQuery] double lat, [FromQuery] double lng, [FromQuery] double radius = 10000, [FromQuery] int limit = 20)
         {
             try
             {
@@ -144,6 +144,34 @@ namespace GreenCycle.API.Controllers
 
                 var success = await _yardService.UpdateYardProfileAsync(userId, req.Name, req.Address, req.OperatingHours, req.Latitude, req.Longitude);
                 return Ok(new { Success = success, Message = "Cập nhật thành công." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Người dùng đánh giá sao (1-5) và nhận xét cho Vựa.
+        /// </summary>
+        [HttpPost("{yardId:int}/review")]
+        [Authorize]
+        public async Task<IActionResult> ReviewYard(int yardId, [FromBody] GreenCycle.Application.DTOs.Yard.ReviewYardRequestDto req)
+        {
+            try
+            {
+                if (req.Rating < 1 || req.Rating > 5)
+                {
+                    return BadRequest(new { Success = false, Message = "Số sao đánh giá phải từ 1 đến 5 sao." });
+                }
+
+                var success = await _yardService.ReviewYardAsync(yardId, req.Rating, req.Comment);
+                if (!success)
+                {
+                    return NotFound(new { Success = false, Message = "Không tìm thấy thông tin vựa để đánh giá." });
+                }
+
+                return Ok(new { Success = true, Message = "Cảm ơn bạn đã gửi đánh giá cho Vựa!" });
             }
             catch (Exception ex)
             {

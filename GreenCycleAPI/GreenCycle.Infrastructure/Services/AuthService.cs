@@ -16,63 +16,127 @@ namespace GreenCycle.Application.Interfaces.Services
         private readonly IMemoryCache _cache;
         private readonly IConfiguration _configuration;
 
+        private readonly IOtpSender _otpSender;
+
         // Key prefix lưu OTP trong cache
         private const string OtpCacheKeyPrefix = "reg_otp:";
+        private const string OtpCooldownKeyPrefix = "reg_otp_cd:";
+        private const string OtpAttemptsKeyPrefix = "reg_otp_try:";
         // Thời gian OTP còn hiệu lực
         private static readonly TimeSpan OtpExpiry = TimeSpan.FromMinutes(5);
+        // Khoảng cách tối thiểu giữa 2 lần gửi OTP cho cùng một SDT
+        private static readonly TimeSpan OtpResendCooldown = TimeSpan.FromSeconds(60);
+        // Số lần nhập sai tối đa trước khi OTP bị hủy
+        private const int MaxOtpAttempts = 5;
 
         public AuthService(
             GreenCycleDbContext context,
             IJwtTokenGenerator jwtTokenGenerator,
             IMemoryCache cache,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IOtpSender otpSender)
         {
             _context = context;
             _jwtTokenGenerator = jwtTokenGenerator;
             _cache = cache;
             _configuration = configuration;
+            _otpSender = otpSender;
         }
 
         // ─────────────────────────────────────────────
-        // GỬI OTP (Bước 1 của đăng ký)
+        // GỬI OTP (Bước 1 của đăng ký - qua Email)
         // ─────────────────────────────────────────────
         public async Task SendOtpForRegisterAsync(SendOtpRequestDto request)
         {
+            var targetEmail = !string.IsNullOrWhiteSpace(request.Email) ? request.Email.Trim().ToLowerInvariant() : null;
+            var targetPhone = !string.IsNullOrWhiteSpace(request.Phone) ? request.Phone.Trim() : null;
+
+            if (string.IsNullOrWhiteSpace(targetEmail) && string.IsNullOrWhiteSpace(targetPhone))
+                throw new Exception("Vui lòng nhập địa chỉ Email hoặc Số điện thoại để nhận mã OTP!");
+
+            // Ưu tiên gửi qua Email theo yêu cầu tiết kiệm chi phí
+            var target = targetEmail ?? targetPhone!;
+
+            // Kiểm tra Email đã đăng ký chưa
+            if (!string.IsNullOrWhiteSpace(targetEmail) && await _context.Users.AnyAsync(u => u.Email == targetEmail))
+            {
+                throw new Exception("Địa chỉ Email này đã được đăng ký!");
+            }
+
             // Kiểm tra SĐT đã đăng ký chưa
-            if (await _context.Users.AnyAsync(u => u.Phone == request.Phone))
+            if (!string.IsNullOrWhiteSpace(targetPhone) && await _context.Users.AnyAsync(u => u.Phone == targetPhone))
             {
                 throw new Exception("Số điện thoại này đã được đăng ký!");
             }
 
-            // Tạo OTP ngẫu nhiên 6 chữ số
-            var otp = new Random().Next(100000, 999999).ToString();
+            // Chống spam: mỗi Email/SĐT chỉ được yêu cầu OTP mới sau 60 giây
+            var cooldownKey = OtpCooldownKeyPrefix + target;
+            if (_cache.TryGetValue(cooldownKey, out _))
+            {
+                throw new Exception("Vui lòng chờ 60 giây trước khi yêu cầu gửi lại mã OTP.");
+            }
 
-            // Lưu OTP vào In-Memory Cache với TTL 5 phút
-            var cacheKey = OtpCacheKeyPrefix + request.Phone;
-            _cache.Set(cacheKey, otp, OtpExpiry);
+            // Tạo OTP ngẫu nhiên 6 chữ số bằng bộ sinh số an toàn
+            var otp = System.Security.Cryptography.RandomNumberGenerator.GetInt32(100000, 1000000).ToString();
 
-            // ── DEV: In OTP ra Console để test ──────────────────────────────
-            // PROD: Thay bằng SMS Gateway (Twilio / ESMS / Viettel)
-            Console.WriteLine("======================================");
-            Console.WriteLine($"  [OTP] SĐT: {request.Phone}");
-            Console.WriteLine($"  [OTP] Mã OTP: {otp}  (hiệu lực 5 phút)");
-            Console.WriteLine("======================================");
-            // ────────────────────────────────────────────────────────────────
+            // Gửi qua Email (hoặc fallback SMS)
+            await _otpSender.SendOtpAsync(target, otp, (int)OtpExpiry.TotalMinutes, "Mã xác thực đăng ký GreenCycle");
 
-            await Task.CompletedTask;
+            // Chỉ lưu sau khi gửi thành công; OTP mới reset bộ đếm nhập sai
+            _cache.Set(OtpCacheKeyPrefix + target, otp, OtpExpiry);
+            _cache.Remove(OtpAttemptsKeyPrefix + target);
+            _cache.Set(cooldownKey, true, OtpResendCooldown);
         }
 
         // ─────────────────────────────────────────────
-        // ĐĂNG KÝ TÀI KHOẢN (Bước 2 — kiểm tra OTP)
+        // ĐĂNG KÝ TÀI KHOẢN (Bước 2 — kiểm tra OTP Email/SĐT)
         // ─────────────────────────────────────────────
         public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
         {
-            // 1. Kiểm tra OTP có hợp lệ không
-            var cacheKey = OtpCacheKeyPrefix + request.Phone;
-            if (!_cache.TryGetValue(cacheKey, out string? storedOtp) || storedOtp != request.OtpCode)
+            // Xác định target kiểm tra OTP: ưu tiên Email
+            var targetEmail = !string.IsNullOrWhiteSpace(request.Email) ? request.Email.Trim().ToLowerInvariant() : null;
+            var targetPhone = !string.IsNullOrWhiteSpace(request.Phone) ? request.Phone.Trim() : null;
+
+            string targetKey = targetPhone ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(targetEmail) && _cache.TryGetValue(OtpCacheKeyPrefix + targetEmail, out _))
+            {
+                targetKey = targetEmail;
+            }
+            else if (!string.IsNullOrWhiteSpace(targetPhone))
+            {
+                targetKey = targetPhone;
+            }
+
+            // 1. Kiểm tra OTP có hợp lệ không (giới hạn số lần nhập sai)
+            var cacheKey = OtpCacheKeyPrefix + targetKey;
+            var attemptsKey = OtpAttemptsKeyPrefix + targetKey;
+
+            if (!_cache.TryGetValue(cacheKey, out string? storedOtp) || storedOtp == null)
             {
                 throw new Exception("Mã OTP không hợp lệ hoặc đã hết hạn!");
             }
+
+            var submitted = request.OtpCode ?? string.Empty;
+            bool otpMatches = System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(
+                System.Text.Encoding.UTF8.GetBytes(storedOtp),
+                System.Text.Encoding.UTF8.GetBytes(submitted));
+
+            if (!otpMatches)
+            {
+                var attempts = _cache.TryGetValue(attemptsKey, out int current) ? current + 1 : 1;
+                if (attempts >= MaxOtpAttempts)
+                {
+                    // Hủy OTP sau quá nhiều lần nhập sai → buộc yêu cầu mã mới
+                    _cache.Remove(cacheKey);
+                    _cache.Remove(attemptsKey);
+                    throw new Exception("Bạn đã nhập sai quá nhiều lần. Vui lòng yêu cầu gửi lại mã OTP mới.");
+                }
+                _cache.Set(attemptsKey, attempts, OtpExpiry);
+                throw new Exception($"Mã OTP không đúng. Bạn còn {MaxOtpAttempts - attempts} lần thử.");
+            }
+
+            _cache.Remove(cacheKey);
+            _cache.Remove(attemptsKey);
 
             // 2. Kiểm tra SĐT chưa tồn tại (double-check)
             if (await _context.Users.AnyAsync(u => u.Phone == request.Phone))
@@ -330,6 +394,70 @@ namespace GreenCycle.Application.Interfaces.Services
                 RoleName = role.RoleName!,
                 Token = token
             };
+        }
+
+        // ─────────────────────────────────────────────
+        // QUÊN MẬT KHẨU - BƯỚC 1: GỬI OTP QUA EMAIL
+        // ─────────────────────────────────────────────
+        public async Task SendForgotPasswordOtpAsync(ForgotPasswordOtpRequestDto request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email))
+                throw new Exception("Vui lòng nhập địa chỉ Email!");
+
+            var email = request.Email.Trim().ToLowerInvariant();
+
+            // Kiểm tra tài khoản có tồn tại không
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("Không tìm thấy tài khoản nào với địa chỉ Email này!");
+            }
+
+            var cooldownKey = "pwd_otp_cd:" + email;
+            if (_cache.TryGetValue(cooldownKey, out _))
+            {
+                throw new Exception("Vui lòng chờ 60 giây trước khi yêu cầu gửi lại mã OTP.");
+            }
+
+            var otp = System.Security.Cryptography.RandomNumberGenerator.GetInt32(100000, 1000000).ToString();
+
+            await _otpSender.SendOtpAsync(email, otp, (int)OtpExpiry.TotalMinutes, "Mã xác thực đặt lại mật khẩu GreenCycle");
+
+            _cache.Set("pwd_otp:" + email, otp, OtpExpiry);
+            _cache.Set(cooldownKey, true, OtpResendCooldown);
+        }
+
+        // ─────────────────────────────────────────────
+        // QUÊN MẬT KHẨU - BƯỚC 2: XÁC THỰC OTP & ĐẶT LẠI MẬT KHẨU
+        // ─────────────────────────────────────────────
+        public async Task ResetPasswordAsync(ResetPasswordRequestDto request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email))
+                throw new Exception("Vui lòng nhập địa chỉ Email!");
+            if (string.IsNullOrWhiteSpace(request.NewPassword) || request.NewPassword.Length < 6)
+                throw new Exception("Mật khẩu mới phải có ít nhất 6 ký tự!");
+
+            var email = request.Email.Trim().ToLowerInvariant();
+            var cacheKey = "pwd_otp:" + email;
+
+            if (!_cache.TryGetValue(cacheKey, out string? storedOtp) || storedOtp == null)
+            {
+                throw new Exception("Mã OTP không hợp lệ hoặc đã hết hạn!");
+            }
+
+            var submitted = request.OtpCode?.Trim() ?? string.Empty;
+            if (storedOtp != submitted)
+            {
+                throw new Exception("Mã OTP không chính xác!");
+            }
+
+            _cache.Remove(cacheKey);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email)
+                ?? throw new Exception("Không tìm thấy tài khoản người dùng!");
+
+            user.PassWordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+            await _context.SaveChangesAsync();
         }
 
         // ─────────────────────────────────────────────

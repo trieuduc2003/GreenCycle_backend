@@ -16,6 +16,7 @@ namespace GreenCycle.Application.DTOs.Order
         
         // Extended info for Pick-up
         public string? SellerName { get; set; }
+        public string? SellerPhone { get; set; }
         public string? PickupAddress { get; set; }
         public double? DistanceKm { get; set; }
         public double? Latitude { get; set; }

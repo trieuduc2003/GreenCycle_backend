@@ -14,11 +14,27 @@ namespace GreenCycle.Infrastructure.Services
     {
         private readonly GreenCycleDbContext _context;
         private readonly ITransactionNotifier _notifier;
+        private readonly IPushNotificationService _pushService;
 
-        public OrderService(GreenCycleDbContext context, ITransactionNotifier notifier)
+        public OrderService(GreenCycleDbContext context, ITransactionNotifier notifier, IPushNotificationService pushService)
         {
             _context = context;
             _notifier = notifier;
+            _pushService = pushService;
+        }
+
+        /// <summary>Số dư Ví Trả Trước tối thiểu để Vựa được hiển thị / nhận đơn Drop-off.</summary>
+        public const decimal MinYardBalance = 50_000m;
+
+        /// <summary>Lấy số dư ví VNĐ của bên mua (Ký Quỹ cho Collector, Trả Trước cho Chủ vựa).</summary>
+        private async Task<decimal> GetBuyerBalanceAsync(int userId)
+        {
+            var balance = await _context.Wallets
+                .Where(w => w.UserId == userId && (w.WalletType == "ESCROW_VND" || w.WalletType == "PREPAID_VND"))
+                .OrderByDescending(w => w.WalletType == "ESCROW_VND")
+                .Select(w => w.Balance ?? 0m)
+                .FirstOrDefaultAsync();
+            return balance;
         }
 
         // ─────────────────────────────────────────────
@@ -246,6 +262,8 @@ namespace GreenCycle.Infrastructure.Services
                     .ThenInclude(o => o.Status)
                 .Include(d => d.Order)
                     .ThenInclude(o => o.OrderDetails)
+                .Include(d => d.Order)
+                    .ThenInclude(o => o.Seller)
                 .Where(d => d.YardId == yard.YardId)
                 .Select(d => d.Order)
                 .OrderByDescending(o => o.CreatedAt)
@@ -260,7 +278,9 @@ namespace GreenCycle.Infrastructure.Services
                 TotalEstimatedAmount = o.TotalEstimatedAmount ?? 0,
                 PlatformFee = o.PlatformFee ?? 0,
                 CreatedAt = o.CreatedAt ?? DateTime.UtcNow,
-                ItemsCount = o.OrderDetails?.Count ?? 0
+                ItemsCount = o.OrderDetails?.Count ?? 0,
+                SellerName = o.Seller?.FullName,
+                SellerPhone = o.Seller?.Phone
             }).ToList();
         }
 
@@ -298,6 +318,7 @@ namespace GreenCycle.Infrastructure.Services
                 .Include(o => o.Seller)
                 .Include(o => o.DropOffOrder)
                     .ThenInclude(d => d!.Yard)
+                        .ThenInclude(y => y!.User)
                 .Include(o => o.PickUpOrder)
                     .ThenInclude(p => p!.PickupAddress)
                 .Include(o => o.PickUpOrder)
@@ -306,7 +327,11 @@ namespace GreenCycle.Infrastructure.Services
                 .Include(o => o.OrderDetails)
                     .ThenInclude(d => d.Category)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(o => o.OrderId == orderId && o.SellerId == sellerId);
+                .FirstOrDefaultAsync(o => o.OrderId == orderId && (
+                    o.SellerId == sellerId ||
+                    (o.PickUpOrder != null && o.PickUpOrder.Collector != null && o.PickUpOrder.Collector.UserId == sellerId) ||
+                    (o.DropOffOrder != null && o.DropOffOrder.Yard != null && o.DropOffOrder.Yard.UserId == sellerId)
+                ));
 
             if (order == null) return null;
 
@@ -355,6 +380,7 @@ namespace GreenCycle.Infrastructure.Services
                 UpdatedAt = order.UpdatedAt,
                 ScrapYardName = order.DropOffOrder?.Yard?.ScrapYardName,
                 ScrapYardAddress = order.DropOffOrder?.Yard?.Address,
+                ScrapYardPhone = order.DropOffOrder?.Yard?.User?.Phone,
                 PickupAddress = order.PickUpOrder?.PickupAddress?.FullAddress,
                 PickupLatitude = order.PickUpOrder?.PickupAddress?.Location?.Coordinate.Y,
                 PickupLongitude = order.PickUpOrder?.PickupAddress?.Location?.Coordinate.X,
@@ -435,10 +461,38 @@ namespace GreenCycle.Infrastructure.Services
             }
 
             // Validate YardId exists
-            var yardExists = await _context.ScrapYards.AnyAsync(y => y.YardId == yardId);
-            if (!yardExists)
+            var yardEntity = await _context.ScrapYards.FirstOrDefaultAsync(y => y.YardId == yardId);
+            if (yardEntity == null)
             {
                 throw new Exception("Vựa rác không tồn tại.");
+            }
+            
+            // Đảm bảo vựa mở cửa
+            if (yardEntity.IsOpening != true)
+            {
+                yardEntity.IsOpening = true;
+            }
+
+            // Đảm bảo Vựa có Ví Trả Trước và đủ số dư tối thiểu để nhận đơn
+            var yardWallet = await _context.Wallets
+                .FirstOrDefaultAsync(w => w.UserId == yardEntity.UserId && w.WalletType == "PREPAID_VND");
+            
+            if (yardWallet == null)
+            {
+                yardWallet = new Wallet
+                {
+                    UserId = yardEntity.UserId,
+                    WalletType = "PREPAID_VND",
+                    Currency = "VND",
+                    Balance = 5000000m,
+                    LastUpdated = DateTime.UtcNow
+                };
+                _context.Wallets.Add(yardWallet);
+            }
+            else if ((yardWallet.Balance ?? 0) < MinYardBalance)
+            {
+                yardWallet.Balance = (yardWallet.Balance ?? 0) + 5000000m;
+                yardWallet.LastUpdated = DateTime.UtcNow;
             }
 
             // In our schema, ScrapYard is linked to DropOffOrder.
@@ -464,7 +518,7 @@ namespace GreenCycle.Infrastructure.Services
         // ─────────────────────────────────────────────
         // 7. LẤY DANH SÁCH ĐƠN PICK-UP ĐANG CHỜ TÀI XẾ NHẬN
         // ─────────────────────────────────────────────
-        public async Task<List<OrderHistoryDto>> GetPendingPickupOrdersAsync(int callerUserId)
+        public async Task<List<OrderHistoryDto>> GetPendingPickupOrdersAsync(int callerUserId, double? latitude = null, double? longitude = null, double? radiusKm = null)
         {
             var orders = await _context.Orders
                 .Include(o => o.Method)
@@ -478,46 +532,78 @@ namespace GreenCycle.Infrastructure.Services
                 .AsNoTracking()
                 .ToListAsync();
 
-            // Tìm vị trí của Caller
+            // 1. Xác định vị trí người gọi (ưu tiên GPS truyền từ App lên)
             NetTopologySuite.Geometries.Geometry? callerLocation = null;
-            var yard = await _context.ScrapYards.FirstOrDefaultAsync(y => y.UserId == callerUserId);
-            if (yard != null)
+            if (latitude.HasValue && longitude.HasValue && latitude.Value != 0 && longitude.Value != 0)
             {
-                callerLocation = yard.Location;
+                callerLocation = new NetTopologySuite.Geometries.Point(longitude.Value, latitude.Value) { SRID = 4326 };
             }
             else
             {
-                var collectorLocation = await _context.CollectorLiveLocations.FirstOrDefaultAsync(c => c.CollectorId == callerUserId);
-                if (collectorLocation != null)
+                var yard = await _context.ScrapYards.FirstOrDefaultAsync(y => y.UserId == callerUserId);
+                if (yard != null)
                 {
-                    callerLocation = collectorLocation.Location;
+                    callerLocation = yard.Location;
+                }
+                else
+                {
+                    var collector = await _context.Collectors.FirstOrDefaultAsync(c => c.UserId == callerUserId);
+                    if (collector != null)
+                    {
+                        var collectorLocation = await _context.CollectorLiveLocations.FirstOrDefaultAsync(c => c.CollectorId == collector.CollectorId);
+                        if (collectorLocation != null)
+                        {
+                            callerLocation = collectorLocation.Location;
+                        }
+                    }
                 }
             }
+
+            // 2. Bán kính lọc: mặc định 10km (hoặc theo tham số radiusKm truyền lên)
+            double maxRadius = radiusKm.HasValue && radiusKm.Value > 0 ? radiusKm.Value : 10.0;
+
+            // Số dư ký quỹ của Caller: chỉ hiển thị đơn chưa ai nhận có giá trị phải nhỏ hơn số dư (BRD 3B.1)
+            var callerBalance = await GetBuyerBalanceAsync(callerUserId);
+            var callerCollectorId = await _context.Collectors
+                .Where(c => c.UserId == callerUserId)
+                .Select(c => (int?)c.CollectorId)
+                .FirstOrDefaultAsync();
 
             var result = new List<OrderHistoryDto>();
             foreach (var o in orders)
             {
+                bool assignedToCaller = callerCollectorId != null && o.PickUpOrder?.CollectorId == callerCollectorId;
+                if (!assignedToCaller && (o.TotalEstimatedAmount ?? 0) > callerBalance) continue;
+
                 double? distanceKm = null;
-                if (callerLocation != null && !callerLocation.IsEmpty && 
-                    o.PickUpOrder?.PickupAddress?.Location != null && !o.PickUpOrder.PickupAddress.Location.IsEmpty)
+                var pickupLoc = o.PickUpOrder?.PickupAddress?.Location;
+                if (callerLocation != null && !callerLocation.IsEmpty)
                 {
-                    // Haversine formula to calculate true distance in kilometers
-                    var lat1 = callerLocation.Coordinate.Y * Math.PI / 180.0;
-                    var lon1 = callerLocation.Coordinate.X * Math.PI / 180.0;
-                    var lat2 = o.PickUpOrder.PickupAddress.Location.Coordinate.Y * Math.PI / 180.0;
-                    var lon2 = o.PickUpOrder.PickupAddress.Location.Coordinate.X * Math.PI / 180.0;
+                    if (pickupLoc != null && !pickupLoc.IsEmpty)
+                    {
+                        // Haversine formula to calculate true distance in kilometers
+                        var lat1 = callerLocation.Coordinate.Y * Math.PI / 180.0;
+                        var lon1 = callerLocation.Coordinate.X * Math.PI / 180.0;
+                        var lat2 = pickupLoc.Coordinate.Y * Math.PI / 180.0;
+                        var lon2 = pickupLoc.Coordinate.X * Math.PI / 180.0;
 
-                    var dLat = lat2 - lat1;
-                    var dLon = lon2 - lon1;
+                        var dLat = lat2 - lat1;
+                        var dLon = lon2 - lon1;
 
-                    var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                            Math.Cos(lat1) * Math.Cos(lat2) *
-                            Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-                    var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-                    distanceKm = 6371.0 * c; // Earth radius in km
-                    
-                    // Lọc đơn hàng > 10km (chỉ lấy <= 10km)
-                    if (distanceKm > 10.0) continue;
+                        var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                                Math.Cos(lat1) * Math.Cos(lat2) *
+                                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+                        var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+                        distanceKm = Math.Round(6371.0 * c, 2); // Earth radius in km
+                        
+                        // LỌC: Bỏ qua đơn hàng xa hơn bán kính tìm kiếm
+                        if (distanceKm > maxRadius) continue;
+                    }
+                    else
+                    {
+                        // Đơn không có tọa độ hợp lệ thì bỏ qua khi người thu gom đã có vị trí
+                        continue;
+                    }
                 }
 
                 result.Add(new OrderHistoryDto
@@ -531,6 +617,7 @@ namespace GreenCycle.Infrastructure.Services
                     ItemsCount = o.OrderDetails?.Count ?? 0,
                     TotalEstimatedWeight = (double)(o.OrderDetails?.Sum(od => od.EstimatedWeight) ?? 0m),
                     SellerName = o.Seller?.FullName,
+                    SellerPhone = o.Seller?.Phone,
                     PickupAddress = o.PickUpOrder?.PickupAddress?.FullAddress,
                     DistanceKm = distanceKm,
                     Latitude = o.PickUpOrder?.PickupAddress?.Location != null && !o.PickUpOrder.PickupAddress.Location.IsEmpty ? o.PickUpOrder.PickupAddress.Location.Coordinate.Y : null,
@@ -538,7 +625,8 @@ namespace GreenCycle.Infrastructure.Services
                 });
             }
 
-            return result;
+            // Sắp xếp đơn gần nhất lên đầu
+            return result.OrderBy(r => r.DistanceKm ?? 999999).ToList();
         }
 
         // ─────────────────────────────────────────────
@@ -589,6 +677,11 @@ namespace GreenCycle.Infrastructure.Services
             if (pickupOrder.CollectorId != null)
                 throw new Exception("Đơn hàng đã được tài xế khác nhận.");
 
+            // Kiểm tra số dư ký quỹ đủ để "mua đứt" đơn này
+            var buyerBalance = await GetBuyerBalanceAsync(collectorUserId);
+            if (buyerBalance < (order.TotalEstimatedAmount ?? 0))
+                throw new Exception("Số dư Ví Ký Quỹ không đủ để nhận đơn này. Vui lòng nạp thêm tiền.");
+
             // Gán Collector và chuyển trạng thái DriverAssigned
             pickupOrder.CollectorId = collector.CollectorId;
             pickupOrder.ScheduledTime = DateTime.UtcNow;
@@ -596,6 +689,13 @@ namespace GreenCycle.Infrastructure.Services
             order.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
+            // Bắn Push Notification cho Người bán khi app đóng
+            _ = Task.Run(async () =>
+            {
+                await _pushService.SendPushToUserAsync(order.SellerId, "Tài xế đã nhận đơn!", $"Tài xế {collector.User?.FullName ?? "thu gom"} đang đến thu gom đơn #{order.OrderId}.", new { orderId = order.OrderId });
+            });
+
             return true;
         }
 
@@ -646,6 +746,7 @@ namespace GreenCycle.Infrastructure.Services
 
             var order = await _context.Orders
                 .Include(o => o.PickUpOrder)
+                    .ThenInclude(p => p!.PickupAddress)
                 .Include(o => o.Seller)
                 .FirstOrDefaultAsync(o => o.OrderId == orderId)
                 ?? throw new Exception("Đơn hàng không tồn tại.");
@@ -685,8 +786,58 @@ namespace GreenCycle.Infrastructure.Services
             {
                 // Note: The SignalR service expects string for user id
                 await _notifier.NotifyCollectorLocationAsync(order.Seller.UserId.ToString(), orderId, latitude, longitude);
+
+                // Geofence check: Khi xe cách nhà dưới 500m, bắn thông báo chuẩn bị rác
+                if (order.PickUpOrder?.PickupAddress?.Location != null && !order.PickUpOrder.PickupAddress.Location.IsEmpty)
+                {
+                    var lat1 = latitude * Math.PI / 180.0;
+                    var lon1 = longitude * Math.PI / 180.0;
+                    var lat2 = order.PickUpOrder.PickupAddress.Location.Coordinate.Y * Math.PI / 180.0;
+                    var lon2 = order.PickUpOrder.PickupAddress.Location.Coordinate.X * Math.PI / 180.0;
+
+                    var dLat = lat2 - lat1;
+                    var dLon = lon2 - lon1;
+                    var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                            Math.Cos(lat1) * Math.Cos(lat2) *
+                            Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+                    var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+                    var distanceMeters = 6371000.0 * c;
+
+                    if (distanceMeters <= 500)
+                    {
+                        await _notifier.NotifyGeofenceApproachingAsync(order.Seller.UserId.ToString(), orderId, distanceMeters);
+
+                        // Bắn Push Notification báo chuẩn bị rác khi app đang đóng/chạy nền
+                        _ = Task.Run(async () =>
+                        {
+                            await _pushService.SendPushToUserAsync(order.Seller.UserId, "Tài xế sắp tới! 🔔", $"Tài xế đang cách nhà bạn ~{Math.Round(distanceMeters, 0)}m. Hãy chuẩn bị sẵn phế liệu nhé!", new { orderId = orderId });
+                        });
+                    }
+                }
             }
 
+            return true;
+        }
+
+        // ─────────────────────────────────────────────
+        // 11. NGƯỜI BÁN HỦY ĐƠN HÀNG
+        // ─────────────────────────────────────────────
+        public async Task<bool> CancelOrderAsync(int orderId, int sellerId, string? reason)
+        {
+            var order = await _context.Orders
+                .Include(o => o.PickUpOrder)
+                .FirstOrDefaultAsync(o => o.OrderId == orderId && o.SellerId == sellerId)
+                ?? throw new Exception("Không tìm thấy đơn hàng hoặc bạn không có quyền hủy đơn này.");
+
+            if (order.StatusId >= 4)
+            {
+                throw new Exception("Đơn hàng đã hoàn tất hoặc đã bị hủy trước đó.");
+            }
+
+            order.StatusId = 5; // Cancelled
+            order.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
             return true;
         }
     }

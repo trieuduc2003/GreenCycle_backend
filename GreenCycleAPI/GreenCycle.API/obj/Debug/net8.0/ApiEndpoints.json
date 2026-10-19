@@ -1,6 +1,38 @@
 [
   {
     "ContainingType": "GreenCycle.API.Controllers.AuthController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/Auth/forgot-password/reset",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Auth.ResetPasswordRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.AuthController",
+    "Method": "ForgotPasswordSendOtp",
+    "RelativePath": "api/Auth/forgot-password/send-otp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.Application.DTOs.Auth.ForgotPasswordOtpRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.AuthController",
     "Method": "GoogleLogin",
     "RelativePath": "api/Auth/google-login",
     "HttpMethod": "POST",
@@ -13,6 +45,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.AuthController",
+    "Method": "HealthCheck",
+    "RelativePath": "api/Auth/health",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -101,6 +143,27 @@
         "Name": "orderId",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.OrdersController",
+    "Method": "CancelOrder",
+    "RelativePath": "api/Orders/{orderId}/cancel",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "GreenCycle.API.Controllers.CancelOrderRequestDto",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -348,6 +411,22 @@
   },
   {
     "ContainingType": "GreenCycle.API.Controllers.UsersController",
+    "Method": "RegisterFcmToken",
+    "RelativePath": "api/Users/fcm-token",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GreenCycle.API.Controllers.UsersController\u002BRegisterFcmTokenRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.UsersController",
     "Method": "GetProfile",
     "RelativePath": "api/Users/profile",
     "HttpMethod": "GET",
@@ -462,6 +541,27 @@
         "Name": "limit",
         "Type": "System.Int32",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GreenCycle.API.Controllers.YardsController",
+    "Method": "ReviewYard",
+    "RelativePath": "api/Yards/{yardId}/review",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "yardId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "req",
+        "Type": "GreenCycle.Application.DTOs.Yard.ReviewYardRequestDto",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

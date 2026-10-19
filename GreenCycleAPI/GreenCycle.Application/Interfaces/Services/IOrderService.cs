@@ -29,8 +29,8 @@ namespace GreenCycle.Application.Interfaces.Services
 
         // ─── Pick-up specific methods ───────────────────────────────────────
 
-        /// <summary>Lấy danh sách đơn Pick-up đang chờ tài xế nhận (StatusId=1, MethodId=2).</summary>
-        Task<List<OrderHistoryDto>> GetPendingPickupOrdersAsync(int callerUserId);
+        /// <summary>Lấy danh sách đơn Pick-up đang chờ tài xế nhận (StatusId=1, MethodId=2), lọc theo tọa độ và bán kính.</summary>
+        Task<List<OrderHistoryDto>> GetPendingPickupOrdersAsync(int callerUserId, double? latitude = null, double? longitude = null, double? radiusKm = null);
 
         /// <summary>Tài xế nhận đơn Pick-up — gán CollectorId, chuyển StatusId → 2 (DriverAssigned).</summary>
         Task<bool> AssignCollectorAsync(int orderId, int collectorUserId);
@@ -40,5 +40,8 @@ namespace GreenCycle.Application.Interfaces.Services
 
         /// <summary>Cập nhật vị trí trực tiếp của Collector và gửi SignalR đến Seller.</summary>
         Task<bool> UpdateCollectorLiveLocationAsync(int orderId, int collectorUserId, double latitude, double longitude);
+
+        /// <summary>Người bán hủy đơn hàng của mình khi chưa hoàn tất (StatusId &lt; 4).</summary>
+        Task<bool> CancelOrderAsync(int orderId, int sellerId, string? reason);
     }
 }

@@ -174,7 +174,7 @@ public class OrdersController : ControllerBase
     /// </summary>
     [HttpPut("{orderId:int}/select-yard")]
     [Authorize]
-    public async Task<IActionResult> SelectYard(int orderId, [FromBody] int yardId)
+    public async Task<IActionResult> SelectYard(int orderId, [FromBody] System.Text.Json.JsonElement body)
     {
         try
         {
@@ -185,6 +185,24 @@ public class OrdersController : ControllerBase
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var sellerId))
             {
                 return Unauthorized(new { Success = false, Message = "Không thể xác định người dùng." });
+            }
+
+            int yardId = 0;
+            if (body.ValueKind == System.Text.Json.JsonValueKind.Number)
+            {
+                yardId = body.GetInt32();
+            }
+            else if (body.ValueKind == System.Text.Json.JsonValueKind.Object)
+            {
+                if (body.TryGetProperty("yardId", out var yProp) || body.TryGetProperty("YardId", out yProp))
+                {
+                    yardId = yProp.GetInt32();
+                }
+            }
+
+            if (yardId <= 0)
+            {
+                return BadRequest(new { Success = false, Message = "YardId không hợp lệ." });
             }
 
             var result = await _orderService.SelectYardForOrderAsync(orderId, sellerId, yardId);
@@ -200,7 +218,10 @@ public class OrdersController : ControllerBase
     /// </summary>
     [HttpGet("pickup/pending")]
     [Authorize(Roles = "Collector,ScrapYard")]
-    public async Task<IActionResult> GetPendingPickupOrders()
+    public async Task<IActionResult> GetPendingPickupOrders(
+        [FromQuery] double? latitude,
+        [FromQuery] double? longitude,
+        [FromQuery] double? radiusKm)
     {
         try
         {
@@ -208,7 +229,7 @@ public class OrdersController : ControllerBase
                 ?? throw new Exception("Không xác định được UserId từ Token.");
             int callerUserId = int.Parse(userIdClaim.Value);
 
-            var orders = await _orderService.GetPendingPickupOrdersAsync(callerUserId);
+            var orders = await _orderService.GetPendingPickupOrdersAsync(callerUserId, latitude, longitude, radiusKm);
             return Ok(new { Success = true, Data = orders });
         }
         catch (Exception ex)
@@ -298,6 +319,38 @@ public class OrdersController : ControllerBase
             return BadRequest(new { Success = false, Message = ex.Message });
         }
     }
+
+    /// <summary>
+    /// [Seller] Người bán hủy đơn hàng của mình khi chưa hoàn tất.
+    /// </summary>
+    [HttpPut("{orderId:int}/cancel")]
+    [Authorize]
+    public async Task<IActionResult> CancelOrder(int orderId, [FromBody] CancelOrderRequestDto? dto)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)
+                           ?? User.FindFirst("userId")
+                           ?? User.FindFirst("sub");
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var sellerId))
+            {
+                return Unauthorized(new { Success = false, Message = "Không thể xác định người dùng." });
+            }
+
+            var result = await _orderService.CancelOrderAsync(orderId, sellerId, dto?.Reason);
+            return Ok(new { Success = result, Message = "Hủy đơn hàng thành công." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Success = false, Message = ex.Message });
+        }
+    }
+}
+
+public class CancelOrderRequestDto
+{
+    public string? Reason { get; set; }
 }
 
 public class CollectorLocationUpdateDto
